@@ -1,0 +1,127 @@
+function optimize_magnetic_robot_transform()
+    % Target transformation matrices for all links
+    % Example: identity transformation for 3 links
+    T_target = repmat({eye(3)}, 1, 3); % Replace with actual desired matrices
+
+    % Optimization parameters
+    num_links_init = 3;
+    M_init = ones(1, num_links_init); % Initialize with all ones
+    theta_M_init = zeros(1, num_links_init); % Initialize with all zeros
+    B_init = [0.01, pi/4]; % Magnitude and angle
+    link_length_init = 0.01;
+    
+    % Initial guess
+    x0 = [num_links_init, M_init, theta_M_init, B_init, link_length_init];
+
+    % Optimization bounds
+    lb = [2, repmat(0.1, 1, n), repmat(-pi, 1, 5), 0, 0.001];
+    ub = [5, repmat(10, 1, 5), repmat(pi, 1, 5), 0.1, 0.1];
+
+    % Optimization options
+    options = optimoptions('fmincon', 'Display', 'iter', 'Algorithm', 'sqp');
+
+    % Perform optimization
+    x_opt = fmincon(@(x) objective_function_transform(x, T_target), x0, [], [], [], [], lb, ub, [], options);
+
+    % Display optimized parameters
+    num_links_opt = round(x_opt(1));
+    disp('Optimized Parameters:');
+    disp(['num_links: ', num2str(num_links_opt)]);
+    disp(['M: ', num2str(x_opt(2:2+num_links_opt-1))]);
+    disp(['theta_M: ', num2str(x_opt(2+num_links_opt:2+2*num_links_opt-1))]);
+    disp(['B: ', num2str(x_opt(end-2:end-1))]);
+    disp(['link_length: ', num2str(x_opt(end))]);
+end
+
+function cost = objective_function_transform(x, T_target)
+    % Unpack optimization variables
+    num_links = round(x(1)); % Ensure num_links is an integer
+    M = x(2:2+num_links-1);
+    theta_M = x(2+num_links:2+2*num_links-1);
+    B = x(end-2:end-1);
+    link_length = x(end);
+
+    % External magnetic field in vector form
+    B_vector = B(1) * [cos(B(2)); sin(B(2))];
+
+    % Simulate the magnetic robot
+    T_actual = simulate_robot_transform(num_links, M, theta_M, B_vector, link_length);
+
+    % Calculate cost as the norm of the difference in transformation matrices
+    cost = 0;
+    for i = 1:num_links
+        cost = cost + norm(T_actual{i} - T_target{i}, 'fro'); % Frobenius norm
+    end
+end
+
+function T_actual = simulate_robot_transform(num_links, M, theta_M, B, link_length)
+    % Parameters
+    k_spring = 0.01 * ones(1, num_links-1);
+    theta_init = zeros(1, num_links); % Initial link angles
+    t_span = [0, 10];
+    options = odeset('RelTol', 1e-6, 'AbsTol', 1e-6);
+
+    % Simulate using ode45
+    [~, Y] = ode45(@(t, y) robot_dynamics(t, y, k_spring, M, theta_M, B, link_length), ...
+                   t_span, [theta_init, zeros(1, num_links)], options);
+
+    % Compute transformation matrices
+    T_actual = compute_transform_matrices(Y(end, 1:num_links), link_length);
+end
+
+function dY = robot_dynamics(t, Y, k_spring, M, theta_M, B, L)
+    % State vector Y = [theta1, theta2, theta3, omega1, omega2, omega3]
+    num_links = length(M);
+    theta = Y(1:num_links);
+    omega = Y(num_links+1:end);
+    
+    % Initialize acceleration vector
+    alpha = zeros(num_links, 1);
+    
+    % Calculate torques for each link
+    for i = 1:num_links
+        % Magnetic torque
+        tau_magnetic = M(i) * norm(B) * sin(theta(i) + theta_M(i) - atan2(B(2), B(1)));
+        
+        % Spring torques
+        tau_spring = 0;
+        if i > 1
+            tau_spring = tau_spring - k_spring(i-1) * (theta(i) - theta(i-1));
+        end
+        if i < num_links
+            tau_spring = tau_spring + k_spring(i) * (theta(i+1) - theta(i));
+        end
+        
+        % Simple damping
+        tau_damping = -0.01 * omega(i);
+        
+        % Sum all torques and calculate acceleration
+        I = 1/12 * L^2; % Simple moment of inertia for a rod
+        alpha(i) = (tau_magnetic + tau_spring + tau_damping) / I;
+    end
+    
+    dY = [omega; alpha];
+end
+
+function T = compute_transform_matrices(theta, link_length)
+    % Compute 2D transformation matrices for each link
+    num_links = length(theta);
+    T = cell(1, num_links);
+    x = 0;
+    y = 0;
+    current_theta = 0;
+
+    for i = 1:num_links
+        current_theta = current_theta + theta(i);
+        dx = link_length * cos(current_theta);
+        dy = link_length * sin(current_theta);
+
+        % Transformation matrix (2D rotation and translation)
+        T{i} = [cos(current_theta), -sin(current_theta), x; 
+                sin(current_theta),  cos(current_theta), y; 
+                0,                  0,                  1];
+        % Update position
+        x = x + dx;
+        y = y + dy;
+    end
+end

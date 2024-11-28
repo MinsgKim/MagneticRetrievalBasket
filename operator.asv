@@ -1,0 +1,8 @@
+rs = magnetic_robot_simulation;
+
+% rotational spring constant of PDMS
+E_pdms = 2e06;  % Young's modulus
+v_pdms = 0.5;   % Poisson's ratio
+mu_pdms = 0.67e06; % shear elastic modulus (Neo-Hookean model)
+
+a 
