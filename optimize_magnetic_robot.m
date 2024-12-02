@@ -2,7 +2,7 @@ function optimize_magnetic_robot()
     % 최적화 파라미터
     num_links = 7; % 고정된 링크 수
     psi_init = 4e04 * ones(1, num_links); % 초기 자화 프로파일 조정
-    theta_M_init = rand(1, num_links); % 제로로 초기화
+    theta_M_init = rand(1, num_links); % 랜덤 초기화
     B_init = 0.015; % 초기 자기장 증가
     link_length_init = 2e-03; % 링크 길이 조정
     disp(rad2deg(theta_M_init))
@@ -17,17 +17,42 @@ function optimize_magnetic_robot()
     % 고정 위치 제약 조건
     x_fixed_last = 0.0; % 마지막 링크의 고정된 x 위치 조정
 
-    % 최적화 옵션
-    options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-6, ...
-        'ConstraintTolerance', 1e-6, 'MaxFunctionEvaluations', 1e4, ...
-        'FiniteDifferenceStepSize', 1e-5, 'OptimalityTolerance', 1e-6, 'Algorithm', 'sqp');
+    % 최적화 결과 저장용 변수 초기화
+    x_results = zeros(3, length(x0)); % 반복 횟수를 3으로 줄였습니다.
+    cost_values = zeros(1, 3);
 
-    % 최적화 수행
-    tic;
-    x_opt = fmincon(@(x) objective_function_mid_position(x, num_links), ...
-                    x0, [], [], [], [], lb, ub, ...
-                    @(x) nonlcon_position_constraints(x, num_links, x_fixed_last), ...
-                    options);
+    for i = 1:3 % 반복 횟수를 줄였습니다.
+        tic;
+        % 최적화 옵션
+        options = optimoptions('fmincon', 'Display', 'off', 'StepTolerance', 1e-6, ...
+            'ConstraintTolerance', 1e-2, 'MaxFunctionEvaluations', 1e4, ...
+            'FiniteDifferenceStepSize', 1e-5, 'OptimalityTolerance', 1e-6, 'Algorithm', 'sqp');
+
+        % GlobalSearch 설정 (필요에 따라 주석 처리하여 fmincon만 사용)
+        % gs = GlobalSearch('Display','off'); % Display 옵션을 'off'로 설정
+        % problem = createOptimProblem('fmincon','x0',x0,'objective', ...
+        %     @(x) objective_function_mid_position(x,num_links),'lb',lb,'ub',ub, ...
+        %     'nonlcon', @(x) nonlcon_position_constraints(x, num_links, x_fixed_last), ...
+        %     'options',options);
+
+        % 최적화 수행 (GlobalSearch 사용 시)
+        % x_result = run(gs, problem);
+
+        % 최적화 수행 (fmincon 직접 사용)
+        x_result = fmincon(@(x) objective_function_mid_position(x, num_links), ...
+                            x0, [], [], [], [], lb, ub, ...
+                            @(x) nonlcon_position_constraints(x, num_links, x_fixed_last), ...
+                            options);
+
+        x_results(i, :) = x_result;
+        cost_values(i) = objective_function_mid_position(x_result, num_links);
+        disp(['Iteration ', num2str(i), ' completed.']);
+        toc;
+    end
+
+    % 최소 비용을 갖는 결과 선택
+    [~, best_idx] = min(cost_values);
+    x_opt = x_results(best_idx, :);
 
     % 최적화된 파라미터 표시
     disp('최적화된 파라미터:');
@@ -35,7 +60,20 @@ function optimize_magnetic_robot()
     disp(['theta_M: ', num2str(rad2deg(x_opt(num_links+1:2*num_links)))]);
     disp(['B: ', num2str(x_opt(end-1))]);
     disp(['link_length: ', num2str(x_opt(end))]);
-    toc;
+
+    % 최적화된 파라미터로 로봇 시뮬레이션 및 시각화
+    M_opt = x_opt(1:num_links);
+    theta_M_opt = x_opt(num_links+1:2*num_links);
+    B_opt = x_opt(end-1);
+    link_length_opt = x_opt(end);
+    M_opt = M_opt * link_length_opt * 0.0033 * 0.0005;
+    B_vector_opt = B_opt * [0; -1];
+
+    % 로봇 시뮬레이션
+    T_actual_opt = simulate_robot_transform(num_links, M_opt, theta_M_opt, B_vector_opt, link_length_opt);
+
+    % 로봇 시각화
+    plot_robot(T_actual_opt);
 end
 
 function cost = objective_function_mid_position(x, num_links)
@@ -52,7 +90,7 @@ function cost = objective_function_mid_position(x, num_links)
     % 자기 로봇 시뮬레이션
     T_actual = simulate_robot_transform(num_links, M, theta_M, B_vector, link_length);
 
-    % 중간 링크의 변환 행렬에서 위치 추출 (3번째 링크)
+    % 중간 링크의 변환 행렬에서 위치 추출 (중간 링크)
     middle_index = ceil(num_links / 2);
     position = T_actual{middle_index}(1:2, 3); % 2D 위치 (x, y) 추출
     position_norm = norm(position); % 위치의 노름 계산
@@ -98,7 +136,7 @@ function T_actual = simulate_robot_transform(num_links, M, theta_M, B, link_leng
     T_actual = compute_transform_matrices(Y(end, 1:num_links), link_length);
 end
 
-function dY = robot_dynamics(t, Y, k_spring, M, theta_M, B, L)
+function dY = robot_dynamics(~, Y, k_spring, M, theta_M, B, L)
     % 상태 벡터 Y = [theta1, theta2, ..., omega1, omega2, ...]
     num_links = length(M);
     theta = Y(1:num_links);
@@ -158,4 +196,25 @@ function T = compute_transform_matrices(theta, link_length)
         x = x + dx;
         y = y + dy;
     end
+end
+
+function plot_robot(T_actual)
+    figure;
+    hold on;
+    num_links = length(T_actual);
+    x_positions = zeros(1, num_links+1);
+    y_positions = zeros(1, num_links+1);
+    x_positions(1) = 0;
+    y_positions(1) = 0;
+    for i = 1:num_links
+        x_positions(i+1) = T_actual{i}(1,3);
+        y_positions(i+1) = T_actual{i}(2,3);
+    end
+    plot(x_positions, y_positions, '-o', 'LineWidth', 2);
+    xlabel('X Position');
+    ylabel('Y Position');
+    title('Optimized Robot Configuration');
+    grid on;
+    axis equal;
+    hold off;
 end
