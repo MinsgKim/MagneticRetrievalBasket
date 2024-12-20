@@ -26,7 +26,7 @@ function obj = optimize_magnetic_robot_second()
     external_magnet.position = [-0.00165; num_links * link_length_init + r_init]; % position of the magnet
 
     % optimized parameters storage
-    num_iterations = 2; % iterations
+    num_iterations = 1; % iterations
     x_results = zeros(num_iterations, length(x0));
     cost_values = zeros(num_iterations, 1);
 
@@ -179,7 +179,7 @@ function dY = robot_dynamics(~, Y, k_spring, M, theta_M, r, L, external_magnet, 
     % calculate torque on each link
     for i = 1:num_links
         % vector from an external magnet to a link
-        r_vec = positions(:, i) - external_magnet.position;
+        r_vec = positions(:, i) - [-0.00165; num_links * L + r];
 
         % calculate magnetic field on a link
         B_ext = calculate_B_vector(r_vec, external_magnet.m);

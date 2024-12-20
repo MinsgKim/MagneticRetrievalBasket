@@ -1,7 +1,7 @@
 classdef External_Magnet
 
     properties
-
+        
         Br;
         volume;
         mu = 4*pi*1e-07;    % vacuum permeability
@@ -11,7 +11,7 @@ classdef External_Magnet
 
     methods
 
-        function obj = External_Magnet()
+        function obj = init(obj)
 
             % parameters of an external magnet
             obj.Br = 1.22; % remanence [T]
@@ -23,12 +23,7 @@ classdef External_Magnet
 
         function B_full = Cal_B(obj, r_vec)
 
-            % parameters of an external magnet
-            obj.Br = 1.22; % remanence [T]
-            obj.volume = (0.03)^3; % Volume (3cm x 3cm x 3cm cube)
-            obj.m = obj.Br * obj.volume / obj.mu; % magnetic moment
-
-
+            obj.init;
             % Dipole 모델을 사용하여 외부 자기장을 계산
             % r_vec: 위치 벡터 (slave magnet 위치 - 외부 자석 위치)
             % m_ext: 외부 자석의 자기 모멘트 (스칼라 값)
@@ -44,6 +39,18 @@ classdef External_Magnet
                 r_vec_3D = [r_vec; 0];
             else
                 r_vec_3D = r_vec;
+            end
+
+            % Debugging output for vector sizes
+            disp('Size of m_vec:');
+            disp(size(m_vec));
+            disp(m_vec)
+            disp('Size of r_vec_3D:');
+            disp(size(r_vec_3D));
+
+            % Check vector sizes
+            if length(m_vec) ~= length(r_vec_3D)
+                error('Vector size mismatch: m_vec and r_vec_3D must both be 3x1 vectors.');
             end
 
             % Calculate magnetic field using dipole formula
