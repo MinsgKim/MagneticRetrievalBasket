@@ -70,6 +70,13 @@ classdef magnetic_robot_simulation
         end
 
 
+        function cost = objective_static(obj, x, num_links, link_length, cross_section_area, r_ext, k_spring, EM)
+
+        end
+
+        function 
+
+
     end
 
 end

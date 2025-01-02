@@ -14,8 +14,8 @@ classdef External_Magnet
         function obj = External_Magnet()
 
             % parameters of an external magnet
-            obj.Br = 1.22; % remanence [T]
-            obj.volume = (0.03)^3; % Volume (3cm x 3cm x 3cm cube)
+            obj.Br = 1.00; % remanence [T], original 1.22 T
+            obj.volume = (0.03)^2*0.01; % Volume (3cm x 3cm x 1cm cube)
             obj.m = obj.Br * obj.volume / obj.mu; % magnetic moment
 
         end
@@ -48,6 +48,7 @@ classdef External_Magnet
 
             % Calculate magnetic field using dipole formula
             B_full = (obj.mu / (4 * pi)) * ( (3 * r_vec_3D * (dot(m_vec, r_vec_3D)) / r_norm^5) - (m_vec / r_norm^3) );
+
         end
 
 
