@@ -7,7 +7,7 @@ RK = Robot_Kinematics;
 
 % optimizing parameters
 num_links = 7; % the number of links
-psi_init = 4e04 * ones(1, num_links); % initial magnetization profile [A/m]
+psi_init = 4e04 * (rand(1, num_links) + 0.5); % initial magnetization profile [A/m]
 rng(0); % fix random generator
 theta_M_init = rand(1, num_links) * 2 * pi - pi; % magnetization direction initial values (0)
 r_init = 0.045; % initial distance from an external magnet to the robot end [m]
@@ -24,7 +24,7 @@ ub = [repmat(6e04, 1, num_links), repmat(pi, 1, num_links), 0.05, 0.003];
 
 
 % optimized parameters storage
-num_iterations = 5; % iterations
+num_iterations = 1; % iterations
 x_results = zeros(num_iterations, length(x0));
 cost_values = zeros(num_iterations, 1);
 
@@ -88,4 +88,66 @@ end
 disp(['theta (degrees): ', num2str(rad2deg(theta_opt))]);
 
 % robot visualization
-RK.plot_robot(T_actual_opt);
+RK.plot_robot(T_actual_opt, theta_opt, theta_M_opt, link_length_opt, r_opt);
+
+%% Code Examination
+
+clc; clear; close all;
+tic;
+EM = External_Magnet;
+mrs = magnetic_robot_simulation;
+RK = Robot_Kinematics;
+
+% initial parameters
+num_links = 7; % the number of links
+psi_init = 4e04 * (rand(1, num_links) + 0.5); % initial magnetization profile [A/m]
+theta_M_init = rand(1, num_links) * 2 * pi - pi; % magnetization direction initial values (0)
+r_init = 0.025; % initial distance from an external magnet to the robot end [m]
+link_length_init = 1.5e-03; % link length
+
+x0 = [psi_init, theta_M_init, r_init, link_length_init];
+
+cost = mrs.objective_function(x0, num_links);
+cross_section_area = 0.0033 * 0.0005; % cross sectional area (3.3 mm x 0.5 mm)
+M_init = psi_init * link_length_init * cross_section_area;
+[T_actual, theta] = RK.simulate_robot_transform(num_links, M_init, theta_M_init, r_init, link_length_init, EM);
+RK.plot_robot(T_actual, theta, theta_M_init, link_length_init, r_init)
+disp(rad2deg(theta))
+disp(rad2deg(theta_M_init))
+
+toc;
+
+
+%% 예: test_static_equilibrium.m
+
+clc; clear; close all;
+
+% 객체 생성
+EM = External_Magnet;
+RK = Robot_Kinematics;
+
+% 파라미터 설정
+num_links = 7;
+link_length = 2e-3;    % 2 mm
+r = 0.025;            % 45 mm
+cross_section_area = 0.0033 * 0.0005; 
+psi_values = 4e04 * (rand(1, num_links) + 0.5);    % 자화 세기 (임의 예)
+theta_M_values = rand(1, num_links)*2*pi - pi;    % 자화 방향
+M = psi_values * link_length * cross_section_area; % 실제 자화량
+
+% ---- 정적 해를 fsolve로 구하기 ----
+theta_eq = RK.solve_static_equilibrium(num_links, M, theta_M_values, r, link_length, EM);
+
+% ---- 결과 변환행렬 및 시각화 ----
+T_equilibrium = RK.compute_transform_matrices(theta_eq, link_length);
+
+figure; hold on;
+x_pos = [0];
+y_pos = [0];
+for i=1:num_links
+    x_pos(i+1) = T_equilibrium{i}(1,3);
+    y_pos(i+1) = T_equilibrium{i}(2,3);
+end
+plot(x_pos,y_pos,'-o','LineWidth',2);
+xlabel('X (m)'); ylabel('Y (m)'); axis equal; grid on;
+title('Static Equilibrium Configuration');
