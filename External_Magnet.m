@@ -11,21 +11,11 @@ classdef External_Magnet
 
     methods
 
-        function obj = External_Magnet()
-
-            % parameters of an external magnet
-            obj.Br = 1.00; % remanence [T], original 1.22 T
-            obj.volume = (0.03)^2*0.01; % Volume (3cm x 3cm x 1cm cube)
-            obj.m = obj.Br * obj.volume / obj.mu; % magnetic moment
-
-        end
-
-
         function B_full = Cal_B(obj, r_vec)
 
             % parameters of an external magnet
-            obj.Br = 1.22; % remanence [T]
-            obj.volume = (0.03)^3; % Volume (3cm x 3cm x 3cm cube)
+            obj.Br = 1.0; % remanence [T], original 1.17 T
+            obj.volume = (0.021)^2*0.01; % Volume (3cm x 3cm x 1cm cube)
             obj.m = obj.Br * obj.volume / obj.mu; % magnetic moment
 
 

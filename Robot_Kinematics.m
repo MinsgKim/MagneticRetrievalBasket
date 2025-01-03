@@ -2,7 +2,7 @@ classdef Robot_Kinematics
 
     properties
 
-        k_spring = 6.88e-8;         % spring coefficient of joint (PDMS or Ecoflex)
+        k_spring = [];         % spring coefficient of joint (PDMS or Ecoflex)
         damping = 1e-6; % damping coefficient of joint
         num_links;
         M;
@@ -54,7 +54,7 @@ classdef Robot_Kinematics
             EM_ = obj.EM;
 
             % Initialize spring coefficient and damping
-            Kspring = 6.88e-8 .* ones(1, num_links_ - 1);
+            Kspring = 3e-5 .* ones(1, num_links_ - 1);
             damping_coefficient = 1e-6;
 
             % Extract state vector
@@ -185,14 +185,12 @@ classdef Robot_Kinematics
 
             end
 
-            plot(-0.00165, r_init, 'square', 'MarkerSize', 25)
-
             hold off;
         end
 
 
 
-        function theta_eq = solve_static_equilibrium(obj, num_links, M, theta_M, r, link_length, EM)
+        function theta_eq = solve_static_equilibrium(obj, num_links, M, theta_M, r, link_length, EM, k_spring)
             %----------------------------------------------------------------------
             % 정적(Quasi-static) 균형 해(theta_eq)를 찾는 함수
             % 각 링크에 걸리는 순토크를 0으로 만드는 각도 벡터 theta를 fsolve로 구한다.
@@ -216,16 +214,17 @@ classdef Robot_Kinematics
             obj.r = r;
             obj.link_length = link_length;
             obj.EM = EM;
+            obj.k_spring = k_spring;
 
             % 초기 추정값 (적당히 0 혹은 작은 난수 등)
-            theta_init = rand(1, num_links)* 1;
+            theta_init = (pi/4) * randn(1, num_links);
 
             % fsolve 옵션 설정
             options = optimoptions('fsolve',...
-                'Display','iter',...       % 중간 과정 표시
+                'Display','None',...       % 중간 과정 표시
                 'MaxIterations',1000,...
                 'MaxFunctionEvaluations',1e5,...
-                'FunctionTolerance',1e-10);
+                'FunctionTolerance',1e-12);
 
             % fsolve 실행
             theta_eq = fsolve(@(theta) obj.equilibrium_equations(theta), ...
@@ -250,10 +249,10 @@ classdef Robot_Kinematics
 
 
             % 스프링 계수(예: 링크 개수-1개만큼)
-            Kspring = 6.88e-12 .* ones(1, num_links_ - 1);
+            Kspring = obj.k_spring;
 
             % 링크들의 2D 위치 계산
-            positions = obj.compute_link_positions(theta, link_length_);
+            positions = obj.compute_link_positions2(theta, link_length_);
 
             % 각 링크에 대한 순토크
             for i = 1:num_links_
@@ -290,6 +289,20 @@ classdef Robot_Kinematics
                 %----------------------------
                 % 최종 합 (정적이므로 = 0)
                 eq(i) = tau_magnetic + tau_spring;
+            end
+        end
+
+        function positions = compute_link_positions2(~, theta, link_length)
+            n = length(theta);
+            positions = zeros(2, n);
+
+            x = 0; y = 0;
+            current_angle = 0;
+            for i = 1:n
+                current_angle = current_angle + theta(i);
+                x = x + link_length * sin(current_angle);
+                y = y + link_length * cos(current_angle);
+                positions(:, i) = [x; y];
             end
         end
 

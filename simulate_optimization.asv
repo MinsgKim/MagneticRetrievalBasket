@@ -7,10 +7,10 @@ RK = Robot_Kinematics;
 
 % optimizing parameters
 num_links = 7; % the number of links
-psi_init = 4e04 * (rand(1, num_links) + 0.5); % initial magnetization profile [A/m]
+psi_init = 5000 * (7 * rand(1, num_links) + 1.0); % initial magnetization profile [A/m]
 rng(0); % fix random generator
 theta_M_init = rand(1, num_links) * 2 * pi - pi; % magnetization direction initial values (0)
-r_init = 0.045; % initial distance from an external magnet to the robot end [m]
+r_init = 0.04; % initial distance from an external magnet to the robot end [m]
 link_length_init = 2e-03; % link length
 
 obj = zeros(3, 3 * num_links);
@@ -19,8 +19,8 @@ obj = zeros(3, 3 * num_links);
 x0 = [psi_init, theta_M_init, r_init, link_length_init];
 
 % optimizing boundaries
-lb = [repmat(2e04, 1, num_links), repmat(-pi, 1, num_links), 0.02, 0.001];
-ub = [repmat(6e04, 1, num_links), repmat(pi, 1, num_links), 0.05, 0.003];
+lb = [repmat(5e03, 1, num_links), repmat(-pi, 1, num_links), 0.02, 0.001];
+ub = [repmat(4e04, 1, num_links), repmat(pi, 1, num_links), 0.05, 0.003];
 
 
 % optimized parameters storage
@@ -57,7 +57,6 @@ for i = 1:num_iterations
 end
 
 
-
 % choose values with a minimal cost
 [~, best_idx] = min(cost_values);
 x_opt = x_results(best_idx, :);
@@ -90,46 +89,182 @@ disp(['theta (degrees): ', num2str(rad2deg(theta_opt))]);
 % robot visualization
 RK.plot_robot(T_actual_opt, theta_opt, theta_M_opt, link_length_opt, r_opt);
 
-%% Static Optimization
+%% simple test
 
 clc; clear; close all;
 
-% fundamental setup:
-num_links = 7;          % # of robot links
-link_length = 2e-3;     % 2 mm
-cross_section_area = 0.0033 * 0.0005; % cross section area for magnetization (3.3 mm X 0.5 mm)
-k_spring_rot = 6.88e-8 * ones(1, num_links-1); % rotational spring constants
+EM = External_Magnet;
+mrs = magnetic_robot_simulation;
+RK = Robot_Kinematics;
 
-r_ext = 0.025;           % y-directional distance from external magnet, 40 mm
-EM = External_Magnet(); % external magnet object
+% optimizing parameters
+num_links = 7; % the number of links
+% psi_init = 1e03 * (rand(1, num_links) + 0.5); % initial magnetization profile [A/m]
+% psi_init = 1e04 * ones(1, num_links);   % 30,000 A/m -> 1:1 ratio
+psi_init = [40000 0 0 0 0 0 24000];
+rng(0); % fix random generator
+% theta_M_init = -[-pi -pi -pi -pi pi pi pi]/2; % magnetization direction initial values (0)
+theta_M_init = [-pi/2 pi/4 pi/4 pi/4 pi/4 pi/4 pi/4]; % magnetization direction initial values (0)
+r_init = 0.04; % initial distance from an external magnet to the robot end [m]
+link_length_init = 2e-03; % link length
+cross_section_area = 0.0033 * 0.0005;
+M_init = psi_init * link_length_init * cross_section_area;
 
-%--------------------------------------------------
-% optimization parameters: psi, thetaM
-%--------------------------------------------------
-% magnetization range (A/m)
-lb_psi = 2e4; ub_psi = 6e4;
-% magnetization direction range (rad)
-lb_theta_M = -pi; ub_theta_M = pi;
+x0 = [psi_init, theta_M_init, r_init, link_length_init];
 
-% initial values
-rng(0);
-psi_init = 4e4*(rand(1,num_links)+0.5);     % from 20,000 to 60,000
-theta_M_init = rand(1,num_links)*2*pi-pi;   % from -pi to pi
-x0 = [psi_init, theta_M_init];
+cost = mrs.objective_function(x0, num_links);
 
-%--------------------------------------------------
-options = optimoptions('fmincon', 'Display','iter',...
-    'MaxFunctionEvaluations', 1e5,...
-    'MaxIterations', 1000,...
+[T_test, theta_test] = RK.simulate_robot_transform(num_links, M_init, theta_M_init, r_init, link_length_init, EM);
+
+RK.num_links = num_links;
+pos = RK.compute_link_positions(theta_test, link_length_init);
+
+for i=1:num_links
+
+    if i > 1
+        x_ct = (pos(1,i)+pos(1,i-1))/2;
+        y_ct = (pos(2,i)+pos(2,i-1))/2;
+
+    else
+        x_ct = pos(1,i)/2;
+        y_ct = pos(2,i)/2;
+
+    end
+
+    r_vec = [x_ct; y_ct]-[0.00165; r_init];
+    fprintf('%d번째:\n', i)
+    disp(['distance: ', num2str(norm(r_vec))])
+    disp(['B-field: ', num2str(norm(EM.Cal_B(r_vec)))])
+
+end
+
+RK.plot_robot(T_test, theta_test, theta_M_init, link_length_init, r_init);
+
+%% static test
+
+clc; clear; close all;
+
+%%% 전역 변수 선언 (최적화 중 기록용) %%%
+global best_fval best_theta
+best_fval = inf;
+best_theta = [];
+
+% 로봇 링크 개수
+num_links = 7;
+link_length = 2e-3;
+cross_section_area = 0.0033 * 0.0005;
+k_spring = 3e-5 * ones(1, num_links-1);
+r_ext = 0.04;
+EM = External_Magnet();
+mrs = magnetic_robot_simulation();
+RK = Robot_Kinematics();
+
+% ---- 최적화 변수 정의 (psi, theta_M) ----
+lb_psi = 5e3;  ub_psi = 6e4;
+lb_thetaM = -pi;  ub_thetaM = pi;
+lb = [lb_psi*ones(1,num_links), lb_thetaM*ones(1,num_links)];
+ub = [ub_psi*ones(1,num_links), ub_thetaM*ones(1,num_links)];
+
+% 초기값
+psi_init = 5e3 * (7 * rand(1,num_links) + 1);
+thetaM_init = (rand(1,num_links)*2*pi - pi);
+x0 = [psi_init, thetaM_init];
+
+% optimized parameters storage
+num_iterations = 20;
+x_results = zeros(num_iterations, length(x0));
+cost_values = zeros(num_iterations, 1);
+
+% fmincon 옵션
+opts = optimoptions('fmincon',...
+    'Display','iter',...
+    'MaxFunctionEvaluations',1e5,...
+    'MaxIterations',1000,...
     'Algorithm','sqp');
-problem = createOptimProblem('fmincon', 'x0', x0, 'lb', lb, 'ub', ub,...
-    'objective', @(x) mrs.objectig)
 
+% createOptimProblem + GlobalSearch
+problem = createOptimProblem('fmincon',...
+    'x0', x0, ...
+    'lb', lb, 'ub', ub, ...
+    'objective', @(x) mrs.objective_static(x, num_links, link_length, cross_section_area, r_ext, k_spring, EM),...
+    'nonlcon', @(x) mrs.constraint_static(x, num_links, link_length, cross_section_area, r_ext, k_spring, EM),...
+    'options', opts);
 
+gs = GlobalSearch;
 
+for i=1:num_iterations
+    [x_opt, fval_opt] = run(gs, problem);
+    x_results(i,:) = x_opt;
+    cost_values(i) = fval_opt;
+    fprintf("Iteration %d completed.\n", i)
+end
 
+[~, best_cost] = min(cost_values);
+x_opt = x_results(best_cost, :);
 
+fprintf('==== Optimization Finished ====\n');
+fprintf('Best Cost (fval_opt): %.4f\n', min(cost_values));
+disp('Optimized x_opt = [psi_1..psi_n, thetaM_1..thetaM_n]:');
+disp(x_opt);
 
+%%% 여기서 더 이상 solve_static_equilibrium을 새로 부르지 않고,
+%%% "best_theta"를 최종 로봇 형상으로 활용
+%%% --------------------------------------------
+global best_theta
+if isempty(best_theta)
+    warning('best_theta is empty! Possibly no update occurred?');
+    return;
+end
 
+theta_final = best_theta;
+positions_opt = RK.compute_link_positions2(theta_final, link_length);
+
+% 검산: 중간 링크 x좌표 합
+if num_links>2
+    x_mid = positions_opt(1,2:end-1);
+else
+    x_mid = 0;
+end
+cost_examination = -sum(x_mid);
+fprintf('Re-check cost with best_theta = %.4f\n', cost_examination);
+
+%%% 최종 플롯
+figure; hold on; axis equal;
+
+for i = 1:num_links
+    r_vec = positions_opt(:,i) - [0; r_ext];
+    B_local = EM.Cal_B(r_vec);
+    fprintf('Link %d:  r=%.4e, |B|=%.4e\n', i, norm(r_vec), norm(B_local));
+end
+
+% 로봇 형상
+for i = 1:num_links-1
+    plot(positions_opt(1,i:i+1), positions_opt(2,i:i+1), 'bo-','LineWidth',2 );
+end
+plot([0 positions_opt(1,1)], [0 positions_opt(2,1)], 'bo-','LineWidth',2)
+plot([0, positions_opt(1,:)], [0, positions_opt(2,:)], 'ro','MarkerSize',8,'LineWidth',2 );
+
+% 자화 방향 화살표
+psi_opt    = x_opt(1:num_links);
+thetaM_opt = x_opt(num_links+1 : 2*num_links);
+current_th = 0;
+for i = 1:num_links
+    current_th = current_th + theta_final(i);
+    th_m = theta_final(i) + thetaM_opt(i);
+    if i == 1
+        x_center = positions_opt(1,i)/2;
+        y_center = positions_opt(2,i)/2;
+    else
+        x_center = (positions_opt(1,i)+positions_opt(1,i-1))/2;
+        y_center = (positions_opt(2,i)+positions_opt(2,i-1))/2;
+    end
+    quiver( x_center, y_center, 0.5*link_length*sin(th_m), 0.5*link_length*cos(th_m), ...
+        'Color',[1,0,0], 'LineWidth',1.5, 'MaxHeadSize',2 );
+end
+
+title('Final Robot Configuration (Best Cost)');
+xlabel('X (m)'); ylabel('Y (m)');
+grid on;
+hold off;
 
 
