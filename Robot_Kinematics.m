@@ -217,6 +217,7 @@ classdef Robot_Kinematics
             obj.k_spring = k_spring;
 
             % 초기 추정값 (적당히 0 혹은 작은 난수 등)
+            rng(0)
             theta_init = (pi/4) * randn(1, num_links);
 
             % fsolve 옵션 설정

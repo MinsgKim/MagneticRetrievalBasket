@@ -101,7 +101,7 @@ RK = Robot_Kinematics;
 num_links = 7; % the number of links
 % psi_init = 1e03 * (rand(1, num_links) + 0.5); % initial magnetization profile [A/m]
 % psi_init = 1e04 * ones(1, num_links);   % 30,000 A/m -> 1:1 ratio
-psi_init = [40000 0 0 0 0 0 24000];
+psi_init = [40000 10000 10000 5000 2000 2000 2000];
 rng(0); % fix random generator
 % theta_M_init = -[-pi -pi -pi -pi pi pi pi]/2; % magnetization direction initial values (0)
 theta_M_init = [-pi/2 pi/4 pi/4 pi/4 pi/4 pi/4 pi/4]; % magnetization direction initial values (0)
@@ -171,7 +171,7 @@ thetaM_init = (rand(1,num_links)*2*pi - pi);
 x0 = [psi_init, thetaM_init];
 
 % optimized parameters storage
-num_iterations = 20;
+num_iterations = 5;
 x_results = zeros(num_iterations, length(x0));
 cost_values = zeros(num_iterations, 1);
 
@@ -229,6 +229,7 @@ cost_examination = -sum(x_mid);
 fprintf('Re-check cost with best_theta = %.4f\n', cost_examination);
 
 %%% 최종 플롯
+% 자기장 계산
 figure; hold on; axis equal;
 
 for i = 1:num_links
@@ -267,4 +268,73 @@ xlabel('X (m)'); ylabel('Y (m)');
 grid on;
 hold off;
 
+%% forward test (static)
+clear; clc; close all;
+
+
+num_links = 7;                              % 링크 개수
+link_length = 2e-3;                         % 각 링크 길이
+cross_section_area = 0.0033 * 0.0005;
+k_spring = 3e-5 * ones(1, num_links-1);
+r_ext = 0.04;                               % 외부 자석 거리
+EM = External_Magnet();
+mrs = magnetic_robot_simulation();
+RK = Robot_Kinematics();
+
+% 초기값
+% psi_init = 5e3 * (7 * rand(1,num_links) + 1);
+psi_init = [40000 10000 10000 5000 2000 2000 2000];
+thetaM_init = [-pi/2 pi/4 pi/4 pi/4 pi/4 pi/4 pi/4];
+x0 = [psi_init, thetaM_init];
+
+global theta_test2 
+
+cost = mrs.objective_static(x0, num_links, link_length, cross_section_area, r_ext, k_spring, EM);
+
+positions = RK.compute_link_positions2(theta_test2, link_length);
+% 검산: 중간 링크 x좌표 합
+if num_links>2
+    x_mid = positions(1,2:end-1);
+else
+    x_mid = 0;
+end
+cost_examination = -sum(x_mid);
+
+% 자기장 계산
+figure; hold on; axis equal;
+
+for i = 1:num_links
+    r_vec = positions(:,i) - [0; r_ext];
+    B_local = EM.Cal_B(r_vec);
+    fprintf('Link %d:  r=%.4e, |B|=%.4e\n', i, norm(r_vec), norm(B_local));
+end
+
+
+% 로봇 형상
+for i = 1:num_links-1
+    plot(positions(1,i:i+1), positions(2,i:i+1), 'bo-','LineWidth',2 );
+end
+plot([0 positions(1,1)], [0 positions(2,1)], 'bo-','LineWidth',2)
+plot([0, positions(1,:)], [0, positions(2,:)], 'ro','MarkerSize',8,'LineWidth',2 );
+
+% 자화 방향 화살표
+current_th = 0;
+for i = 1:num_links
+    current_th = current_th + theta_test2(i);
+    th_m = theta_test2(i) + thetaM_init(i);
+    if i == 1
+        x_center = positions(1,i)/2;
+        y_center = positions(2,i)/2;
+    else
+        x_center = (positions(1,i)+positions(1,i-1))/2;
+        y_center = (positions(2,i)+positions(2,i-1))/2;
+    end
+    quiver( x_center, y_center, 0.5*link_length*sin(th_m), 0.5*link_length*cos(th_m), ...
+        'Color',[1,0,0], 'LineWidth',1.5, 'MaxHeadSize',2 );
+end
+
+title('Final Robot Configuration (Best Cost)');
+xlabel('X (m)'); ylabel('Y (m)');
+grid on;
+hold off;
 

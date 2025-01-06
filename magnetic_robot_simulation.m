@@ -17,6 +17,8 @@ classdef magnetic_robot_simulation
             cross_section_area = 0.0033 * 0.0005; % cross sectional area
             M = M * link_length * cross_section_area;
 
+            gamma = 2.0;
+
             % magnetic robot simulation
             [T_actual, ~] = obj.RK.simulate_robot_transform(num_links, M, theta_M, r, link_length, obj.EM);
 
@@ -28,7 +30,12 @@ classdef magnetic_robot_simulation
                 y_positions(i-1) = T_actual{i}(2, 3);
             end
             %             cost = sum(x_positions);
-            cost = abs(x_positions(3));
+            x_mid = x_positions(3:4);
+            y_mid = y_positions(3:4);
+            x_sum = sum(x_mid);
+            y_sum = sum(y_mid);
+
+            cost = x_sum + gamma * y_sum;
 
             % To maximize, mimimize the cost
             cost = -cost;
@@ -66,15 +73,17 @@ classdef magnetic_robot_simulation
             %             c = link_distances - link_length; % 각 링크 간 거리가 link_length와 일치하도록 강제
             %             y_con = 0.002 - positions(2, end); % y coord. of last link > 2 mm (not negative)
             %             c = [c(:); y_con];
-            %             x_con1 = positions(1, end) - 0.002;
+            x_con1 = positions(1, end) - 0.003;
             %             x_con2 = positions(1, end) + 0.002;
             %             c = [x_con1, x_con2];
+            c = x_con1;
         end
 
+%--------------------quasi-static equilibrium equation----------------------
 
         function cost = objective_static(obj, x, num_links, link_length, cross_section_area, r_ext, k_spring, EM)
             % 전역변수로 best_fval, best_theta 선언
-            global best_fval best_theta
+            global best_fval best_theta theta_test2
 
             % 1) x = [psi_1..psi_n, thetaM_1..thetaM_n]
             gamma = 2.0; % y 항에 대한 가중치
@@ -107,6 +116,9 @@ classdef magnetic_robot_simulation
             y_sum = sum(y_mid);
 
             cost = -(x_sum + gamma * y_sum);
+            
+            theta_test2 = theta_eq;
+
             % => cost를 최소화 => x_sum + gamma*y_end 최대화
             % 5) "현재 cost가 더 좋으면" -> best_fval 갱신, best_theta 갱신
             if cost < best_fval
