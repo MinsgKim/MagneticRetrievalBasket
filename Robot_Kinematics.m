@@ -242,6 +242,8 @@ classdef Robot_Kinematics
             theta_eq = fsolve(@(theta) obj.equilibrium_equations(theta), ...
                 theta_init, options);
 
+            theta_eq = -theta_eq;
+
         end
 
         function eq = equilibrium_equations(obj, theta)

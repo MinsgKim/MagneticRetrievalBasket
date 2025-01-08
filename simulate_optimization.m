@@ -154,7 +154,7 @@ num_links = 7;
 link_length = 2e-3;
 cross_section_area = 0.0033 * 0.0005;
 k_spring = 3e-5 * ones(1, num_links-1);
-r_ext = 0.04;
+r_ext = 0.03;
 EM = External_Magnet();
 mrs = magnetic_robot_simulation();
 RK = Robot_Kinematics();
@@ -166,7 +166,8 @@ lb = [lb_psi*ones(1,num_links), lb_thetaM*ones(1,num_links)];
 ub = [ub_psi*ones(1,num_links), ub_thetaM*ones(1,num_links)];
 
 % 초기값
-psi_init = 5e3 * (7 * rand(1,num_links) + 1);
+% psi_init = 5e3 * (7 * rand(1,num_links) + 1);
+psi_init = [40000 20000 10000 10000 10000 5000 5000];
 thetaM_init = (rand(1,num_links)*2*pi - pi);
 x0 = [psi_init, thetaM_init];
 
@@ -176,9 +177,9 @@ x_results = zeros(num_iterations, length(x0));
 cost_values = zeros(num_iterations, 1);
 
 % fmincon 옵션
-options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-10, ...
-    'ConstraintTolerance', 1e-10, 'MaxFunctionEvaluations', 1e5, ...
-    'FiniteDifferenceStepSize', 1e-6, 'OptimalityTolerance', 1e-6, 'Algorithm', 'interior-point',"EnableFeasibilityMode",true,...
+options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-12, ...
+    'ConstraintTolerance', 1e-3, 'MaxFunctionEvaluations', 1e5, ...
+    'FiniteDifferenceStepSize', 1e-8, 'OptimalityTolerance', 1e-12, 'Algorithm', 'interior-point',"EnableFeasibilityMode",true,...
     "SubproblemAlgorithm","cg");
 
 % createOptimProblem + GlobalSearch
@@ -226,6 +227,9 @@ else
 end
 cost_examination = -sum(x_mid);
 fprintf('Re-check cost with best_theta = %.4f\n', cost_examination);
+
+[c_plz, ceq_plz] = mrs.constraint_static(x_opt, num_links, link_length, cross_section_area, r_ext, k_spring, EM);
+
 
 %%% 최종 플롯
 % 자기장 계산
@@ -282,8 +286,8 @@ RK = Robot_Kinematics();
 
 % 초기값
 % psi_init = 5e3 * (7 * rand(1,num_links) + 1);
-psi_init = [40000 10000 10000 5000 5000 5000 2000];
-thetaM_init = [-pi/4 -pi/4 pi/4 pi/4 pi/4 pi/4 pi/4];
+psi_init = [1000 0 0 0 0 0 0];
+thetaM_init = [-pi/4 -pi/2 pi/4 pi/4 pi/4 pi/4 pi/4];
 x0 = [psi_init, thetaM_init];
 
 global theta_test2 
