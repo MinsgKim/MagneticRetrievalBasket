@@ -98,15 +98,15 @@ mrs = magnetic_robot_simulation;
 RK = Robot_Kinematics;
 
 % optimizing parameters
-num_links = 7; % the number of links
+num_links = 12; % the number of links
 % psi_init = 1e03 * (rand(1, num_links) + 0.5); % initial magnetization profile [A/m]
 % psi_init = 1e04 * ones(1, num_links);   % 30,000 A/m -> 1:1 ratio
-psi_init = [40000 10000 10000 5000 2000 2000 2000];
+psi_init = [60000 40000 20000 20000 20000 10000 10000 10000 10000 10000 10000 10000];
 rng(0); % fix random generator
 % theta_M_init = -[-pi -pi -pi -pi pi pi pi]/2; % magnetization direction initial values (0)
-theta_M_init = [-pi/2 pi/4 pi/4 pi/4 pi/4 pi/4 pi/4]; % magnetization direction initial values (0)
-r_init = 0.04; % initial distance from an external magnet to the robot end [m]
-link_length_init = 2e-03; % link length
+theta_M_init = -[-pi/2 -pi/2 -pi/2 -pi/2 -pi/2 pi/4 pi/4 pi/4 pi/4 pi/4 pi/4 pi/2]; % magnetization direction initial values (0)
+r_init = 0.03; % initial distance from an external magnet to the robot end [m]
+link_length_init = 1e-03; % link length
 cross_section_area = 0.0033 * 0.0005;
 M_init = psi_init * link_length_init * cross_section_area;
 
@@ -171,16 +171,15 @@ thetaM_init = (rand(1,num_links)*2*pi - pi);
 x0 = [psi_init, thetaM_init];
 
 % optimized parameters storage
-num_iterations = 5;
+num_iterations = 1;
 x_results = zeros(num_iterations, length(x0));
 cost_values = zeros(num_iterations, 1);
 
 % fmincon 옵션
-opts = optimoptions('fmincon',...
-    'Display','iter',...
-    'MaxFunctionEvaluations',1e5,...
-    'MaxIterations',1000,...
-    'Algorithm','sqp');
+options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-10, ...
+    'ConstraintTolerance', 1e-10, 'MaxFunctionEvaluations', 1e5, ...
+    'FiniteDifferenceStepSize', 1e-6, 'OptimalityTolerance', 1e-6, 'Algorithm', 'interior-point',"EnableFeasibilityMode",true,...
+    "SubproblemAlgorithm","cg");
 
 % createOptimProblem + GlobalSearch
 problem = createOptimProblem('fmincon',...
@@ -188,7 +187,7 @@ problem = createOptimProblem('fmincon',...
     'lb', lb, 'ub', ub, ...
     'objective', @(x) mrs.objective_static(x, num_links, link_length, cross_section_area, r_ext, k_spring, EM),...
     'nonlcon', @(x) mrs.constraint_static(x, num_links, link_length, cross_section_area, r_ext, k_spring, EM),...
-    'options', opts);
+    'options', options);
 
 gs = GlobalSearch;
 
@@ -283,8 +282,8 @@ RK = Robot_Kinematics();
 
 % 초기값
 % psi_init = 5e3 * (7 * rand(1,num_links) + 1);
-psi_init = [40000 10000 10000 5000 2000 2000 2000];
-thetaM_init = [-pi/2 pi/4 pi/4 pi/4 pi/4 pi/4 pi/4];
+psi_init = [40000 10000 10000 5000 5000 5000 2000];
+thetaM_init = [-pi/4 -pi/4 pi/4 pi/4 pi/4 pi/4 pi/4];
 x0 = [psi_init, thetaM_init];
 
 global theta_test2 

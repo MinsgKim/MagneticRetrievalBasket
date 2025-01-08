@@ -27,7 +27,7 @@ classdef Robot_Kinematics
 %                 theta_init(k)= i*pi/180;
 % 
 %             end
-            t_span = [0, 10]; % simulation time
+            t_span = [0, 1]; % simulation time
             options_ode = odeset('RelTol', 1e-7, 'AbsTol', 1e-7, 'MaxStep', 0.1);
 
             % Store data in object properties
@@ -62,7 +62,7 @@ classdef Robot_Kinematics
 
             % Initialize spring coefficient and damping
             Kspring = 3e-5 .* ones(1, num_links_ - 1);
-            damping_coefficient = 1e-3;
+            damping_coefficient = 1e-4;
 
             % Extract state vector
             theta = Y(1:num_links_);
@@ -100,13 +100,9 @@ classdef Robot_Kinematics
                 if i < num_links_
                     tau_spring = tau_spring + Kspring(i) * (theta(i + 1) - theta(i));
                 end
-%                 disp(num2str(tau_magnetic))
-%                 disp(num2str(tau_spring))
 
                 % Damping torque
                 tau_damping = -damping_coefficient * omega(i);
-%                 disp(num2str(tau_damping))
-%                 disp('okay')
 
                 % Find angular acceleration
                 alpha(i) = (tau_magnetic + tau_spring + tau_damping) / I;
@@ -228,8 +224,8 @@ classdef Robot_Kinematics
             obj.k_spring = k_spring;
 
             % 초기 추정값 (적당히 0 혹은 작은 난수 등)
-%             rng(0)
-            theta_init = (pi/64) * randn(1, num_links);
+            rng(0)
+            theta_init = (pi/16) * randn(1, num_links);
 
             % fsolve 옵션 설정
             options = optimoptions('fsolve',...
@@ -300,13 +296,8 @@ classdef Robot_Kinematics
                 % (damping, inertia는 정적에서 0)
                 %----------------------------
                 % 최종 합 (정적이므로 = 0)
-%                 disp(num2str(tau_magnetic))
-%                 disp(num2str(tau_spring))
-%                 disp("are you sure??")
                 eq(i) = tau_magnetic + tau_spring;
-                eq(i) = eq(i)*1e+3;
             end
-%             disp(num2str(eq))
         end
 
         function positions = compute_link_positions2(~, theta, link_length)

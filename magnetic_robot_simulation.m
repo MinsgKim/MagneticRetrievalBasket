@@ -63,9 +63,9 @@ classdef magnetic_robot_simulation
             end
             c1 = theta_actual_rest + pi/16;
             c2 = -theta_actual_rest - pi/2;
-%             c3 = -theta_actual(1) + pi/8;
+            c3 = -theta_actual(1);
 %             c = c2; 
-            c = [c1; c2];
+            c = [c1; c2; c3];
 
             % extract the position of each link
             positions = zeros(2, num_links);
@@ -126,6 +126,7 @@ classdef magnetic_robot_simulation
             x_sum = sum(x_mid);
             y_sum = sum(y_mid);
 
+%             cost = -theta_eq(1);
             cost = -(x_sum + gamma * y_sum);
             
             theta_test2 = theta_eq;
@@ -143,6 +144,7 @@ classdef magnetic_robot_simulation
             c=[];
             ceq=[];
 
+
             psi = x(1:num_links);
             thetaM = x(num_links+1 : 2*num_links);
 
@@ -151,6 +153,20 @@ classdef magnetic_robot_simulation
 
             % 정적 해석
             theta_eq = obj.RK.solve_static_equilibrium(num_links, M, thetaM, r_ext, link_length, EM, k_spring);
+
+            theta_eq_sum = 0;
+
+            for p = 1:num_links
+
+                theta_eq_sum = theta_eq_sum + theta_eq(p);
+
+            end
+
+%             c1 = -theta_eq_sum - pi/2;
+%             c2 = theta_eq_sum + pi/16;
+%             c3 = theta_eq(1) - pi/3;
+% 
+%             c = [c1; c2; c3];
 
             % 링크 끝단 위치
             pos = obj.RK.compute_link_positions2(theta_eq, link_length);
@@ -164,7 +180,7 @@ classdef magnetic_robot_simulation
             c_link_dist = link_distances - link_length;  % <= 0
 
             % --- (3) 마지막 링크 x in [-1 mm, +1 mm], y >= 3 mm (예시) ---
-            x_end = pos(1,end);
+            x_end = pos(1,num_links);
             y_end = pos(2,end);
 
             x_con1 = x_end - 0.003;   % <=0  -> x_end <= +1 mm
@@ -173,10 +189,22 @@ classdef magnetic_robot_simulation
 
             % 등가 제약(모두 0이어야 함)
             %     ceq = [ceq_first_x; ceq_first_y];
+            ceq1 = x_end;
+            ceq2 = y_end - 0.015;
 
+            ceq = [ceq1; ceq2];
+            
+            c1 = -theta_eq(1);
+%             c2 = theta_eq(1) - pi/3;
+%             c3 = -y_end + 0.01;
+
+            c = [c1];
 
             % 부등호 제약(모두 <= 0)
-            c = [x_con1];
+%             c = [x_con1];
+%             c1 = x_end - 5e-4;
+%             c2 = -x_end;
+%             c = [c1; c2];
         end
 
 
