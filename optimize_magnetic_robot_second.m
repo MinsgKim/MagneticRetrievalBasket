@@ -3,25 +3,22 @@ function obj = optimize_magnetic_robot_second()
 
     % optimizing parameters
     num_links = 7; % the number of links
-    psi_init = 4e04 * ones(1, num_links); % initial magnetization profile [A/m]
-    rng(0); % fix random generator
+    psi_init = 5000 * (7 * rand(1, num_links) + 1.0); % initial magnetization profile [A/m]
     theta_M_init = rand(1, num_links) * 2 * pi - pi; % magnetization direction initial values (0)
     r_init = 0.045; % initial distance from an external magnet to the robot end [m]
     link_length_init = 2e-03; % link length
-
-    obj = zeros(3, 3 * num_links);
 
     % initial guess
     x0 = [psi_init, theta_M_init, r_init, link_length_init];
 
     % optimizing boundaries
-    lb = [repmat(2e04, 1, num_links), repmat(-pi, 1, num_links), 0.02, 0.001];
-    ub = [repmat(6e04, 1, num_links), repmat(pi, 1, num_links), 0.05, 0.003];
+    lb = [repmat(5e03, 1, num_links), repmat(-pi, 1, num_links), 0.04, 0.001];
+    ub = [repmat(5e04, 1, num_links), repmat(pi, 1, num_links), 0.06, 0.0025];
 
     % parameters of an external magnet
     mu0 = 4 * pi * 1e-7; % vacuum permeability
-    external_magnet.Br = 1.22; % remanence [T]
-    external_magnet.volume = (0.03)^3; % Volume (3cm x 3cm x 3cm cube)
+    external_magnet.Br = 1.00; % remanence [T]
+    external_magnet.volume = (0.021)^2 * 0.01; % Volume (3cm x 3cm x 3cm cube)
     external_magnet.m = external_magnet.Br * external_magnet.volume / mu0; % magnetic moment
     external_magnet.position = [-0.00165; num_links * link_length_init + r_init]; % position of the magnet
 
@@ -31,9 +28,10 @@ function obj = optimize_magnetic_robot_second()
     cost_values = zeros(num_iterations, 1);
 
     % option setup
-    options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-6, ...
-        'ConstraintTolerance', 1e-8, 'MaxFunctionEvaluations', 1e5, ...
-        'FiniteDifferenceStepSize', 1e-6, 'OptimalityTolerance', 1e-8, 'Algorithm', 'interior-point');
+    options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-3, ...
+        'ConstraintTolerance', 1e-5, 'MaxFunctionEvaluations', 1e5, ...
+        'FiniteDifferenceStepSize', 1e-6, 'OptimalityTolerance', 1e-6, 'Algorithm', 'interior-point', "EnableFeasibilityMode",true,...
+        "SubproblemAlgorithm","cg");
 
     for i = 1:num_iterations
         tic;
@@ -48,7 +46,8 @@ function obj = optimize_magnetic_robot_second()
             'options', options);
 
         % optimize!
-        [x_result, fval] = fmincon(problem);
+        gs = GlobalSearch;
+        [x_result, fval] = run(gs, problem);
 
         x_results(i, :) = x_result;
         cost_values(i) = fval;
@@ -99,21 +98,33 @@ function cost = objective_function(x, num_links, external_magnet)
     cross_section_area = 0.0033 * 0.0005; % cross sectional area
     M = M * link_length * cross_section_area;
 
+    gamma = 0.5;
+
     % magnetic robot simulation
     [T_actual, ~] = simulate_robot_transform(num_links, M, theta_M, r, link_length, external_magnet);
 
     % calculate the sum of middle links
     x_positions = zeros(num_links-2, 1);
+    y_positions = zeros(num_links-2, 1);
     for i = 2:num_links-1
         x_positions(i-1) = T_actual{i}(1, 3);
+        y_positions(i-1) = T_actual{i}(2, 3);
     end
-    x_sum = sum(x_positions);
+    
+    x_mid = x_positions(3:4);
+    y_mid = y_positions(3:4);
+
+
+    x_sum = sum(x_mid);
+    y_sum = sum(y_mid);
 
     % To maximize, mimimize the cost
-    cost = -x_sum;
+    cost = -(x_sum + gamma * y_sum);
 end
 
 function [c, ceq] = nonlcon_position_constraints(x, num_links, external_magnet)
+    c = [];
+    ceq = [];
     % nonlinear constraints setup
     % optim variables
     M = x(1:num_links);
@@ -133,21 +144,32 @@ function [c, ceq] = nonlcon_position_constraints(x, num_links, external_magnet)
     end
 
     % equation constraints: x position of 1st and last links are same
-    ceq = positions(1, end) - positions(1, 1);
+%     ceq = positions(1, end) - positions(1, 1);
 
     % nonequation constraints:
-    c = positions(1, 1) - positions(1, 2:end-1) + 1e-6; % minute tolerance 1e-6
-    y_con = 0.005 - positions(2, end); % y coord. of last link > 5 mm (not negative)
-    c = [c(:); y_con];
+%     c = positions(1, 1) - positions(1, 2:end-1) + 1e-6; % minute tolerance 1e-6
+%     y_con = 0.005 - positions(2, end); % y coord. of last link > 5 mm (not negative)
+%     ceq = positions(1, end);
+    x_con = positions(1, end) - 1e-03;
+%     x_con2 = -positions(1, end) + 1e-04;
+    c = x_con;
 end
 
 function [T_actual, theta_final] = simulate_robot_transform(num_links, M, theta_M, r, link_length, external_magnet)
     % parameter setup
-    k_spring = 9.21e-4 * ones(1, num_links - 1); % spring coefficient of joint (PDMS or Ecoflex)
+    k_spring = 3e-5 * ones(1, num_links - 1); % spring coefficient of joint (PDMS or Ecoflex)
     damping_coefficient = 1e-6; % damping coefficient
     theta_init = 1e-3 * randn(1, num_links); % initial random angle of each link
-    t_span = [0, 500]; % simulation time
-    options_ode = odeset('RelTol', 1e-8, 'AbsTol', 1e-10, 'MaxStep', 0.1);
+
+    i=0;
+    for k = -45:90/7:45
+        i = i + 1;
+        theta_init(i) = pi/180 * k;
+
+    end
+
+    t_span = [0, 5]; % simulation time
+    options_ode = odeset('RelTol', 1e-7, 'AbsTol', 1e-7, 'MaxStep', 0.1);
 
     % simulation with ode15s
     [~, Y] = ode15s(@(t, y) robot_dynamics(t, y, k_spring, M, theta_M, r, link_length, external_magnet, damping_coefficient), ...

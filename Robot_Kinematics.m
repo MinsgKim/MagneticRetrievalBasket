@@ -20,6 +20,13 @@ classdef Robot_Kinematics
 
             % parameter setup
             theta_init = 1e-3 * randn(1, num_links); % initial random angle of each link
+%             k = 0;
+%             for i=-45:90/7:45
+% 
+%                 k = k + 1;
+%                 theta_init(k)= i*pi/180;
+% 
+%             end
             t_span = [0, 10]; % simulation time
             options_ode = odeset('RelTol', 1e-7, 'AbsTol', 1e-7, 'MaxStep', 0.1);
 
@@ -218,7 +225,7 @@ classdef Robot_Kinematics
 
             % 초기 추정값 (적당히 0 혹은 작은 난수 등)
             rng(0)
-            theta_init = (pi/4) * randn(1, num_links);
+            theta_init = (pi/16) * randn(1, num_links);
 
             % fsolve 옵션 설정
             options = optimoptions('fsolve',...

@@ -1,7 +1,7 @@
 % Main script for magnetic robot simulation
 function magnetic_robot_simulation_old()
     % Parameters
-    num_links = 3;
+    num_links = 7;
     link_length = 0.01; % 1cm links
     k_spring = [0.01, 0.01]; % Spring constants between links [N*m/rad]
     M = [1, 1, 1]; % Magnetization magnitude for each link [A*m^2]

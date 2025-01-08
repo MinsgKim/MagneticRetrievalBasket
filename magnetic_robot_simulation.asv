@@ -17,10 +17,10 @@ classdef magnetic_robot_simulation
             cross_section_area = 0.0033 * 0.0005; % cross sectional area
             M = M * link_length * cross_section_area;
 
-            gamma = 1.5;
+            gamma = 2.0;
 
             % magnetic robot simulation
-            [T_actual, theta_actual] = obj.RK.simulate_robot_transform(num_links, M, theta_M, r, link_length, obj.EM);
+            [T_actual, ~] = obj.RK.simulate_robot_transform(num_links, M, theta_M, r, link_length, obj.EM);
 
             % calculate the sum of middle links
             x_positions = zeros(num_links-2, 1);
@@ -37,7 +37,8 @@ classdef magnetic_robot_simulation
 
             cost = x_sum + gamma * y_sum;
 
-%             cost = -theta_actual(1);
+            % To maximize, mimimize the cost
+            cost = -cost;
         end
 
         function [c, ceq] = nonlcon_position_constraints(obj, x, num_links)
@@ -56,15 +57,13 @@ classdef magnetic_robot_simulation
             [T_actual, theta_actual] = obj.RK.simulate_robot_transform(num_links, M, theta_M, r, link_length, obj.EM);
             
             theta_actual_rest = 0;
-            for p=1:7
+            for p=2:7
 
                 theta_actual_rest = theta_actual_rest + theta_actual(p);
 
             end
-            c1 = theta_actual_rest + pi/16;
-            c2 = -theta_actual_rest - pi/2;
-%             c3 = -theta_actual(1) + pi/8;
-%             c = c2; 
+            c1 = theta_actual(1) - theta_actual_rest - pi/2;
+            c2 = -theta_actual(1) + theta_actual_rest + pi/32;
             c = [c1; c2];
 
             % extract the position of each link
@@ -84,10 +83,10 @@ classdef magnetic_robot_simulation
             %             c = link_distances - link_length; % 각 링크 간 거리가 link_length와 일치하도록 강제
             %             y_con = 0.002 - positions(2, end); % y coord. of last link > 2 mm (not negative)
             %             c = [c(:); y_con];
-            x_con1 = -positions(1, end);
+            x_con1 = positions(1, end) - 0.002;
             %             x_con2 = positions(1, end) + 0.002;
             %             c = [x_con1, x_con2];
-%             c = [c1; c2; x_con1];
+%             c = x_con1;
         end
 
 %--------------------quasi-static equilibrium equation----------------------

@@ -8,9 +8,9 @@ RK = Robot_Kinematics;
 % optimizing parameters
 num_links = 7; % the number of links
 psi_init = 5000 * (7 * rand(1, num_links) + 1.0); % initial magnetization profile [A/m]
-rng(0); % fix random generator
+% rng(0); % fix random generator
 theta_M_init = rand(1, num_links) * 2 * pi - pi; % magnetization direction initial values (0)
-r_init = 0.04; % initial distance from an external magnet to the robot end [m]
+r_init = 0.05; % initial distance from an external magnet to the robot end [m]
 link_length_init = 2e-03; % link length
 
 obj = zeros(3, 3 * num_links);
@@ -19,8 +19,8 @@ obj = zeros(3, 3 * num_links);
 x0 = [psi_init, theta_M_init, r_init, link_length_init];
 
 % optimizing boundaries
-lb = [repmat(5e03, 1, num_links), repmat(-pi, 1, num_links), 0.02, 0.001];
-ub = [repmat(4e04, 1, num_links), repmat(pi, 1, num_links), 0.05, 0.003];
+lb = [repmat(5e03, 1, num_links), repmat(-pi, 1, num_links), 0.04, 0.001];
+ub = [repmat(4e04, 1, num_links), repmat(pi, 1, num_links), 0.06, 0.003];
 
 
 % optimized parameters storage
