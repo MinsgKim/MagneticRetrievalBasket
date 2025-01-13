@@ -85,7 +85,7 @@ classdef RobotState
             link_center = zeros(2, num_links);
             theta_accum = 0; % required for calculating a center of each link
 
-            r_ext = [r; -0.00165];
+            r_ext = [r; -0.0015];
 
             % data storage
             T_m = zeros(1, num_links);
@@ -108,7 +108,7 @@ classdef RobotState
 
                 for j=1:num_links
 
-                    % setup somethings
+                    % setup things
                     theta_accum = theta_accum + theta_link(j);
                     joint_pos(:,j+1) = joint_pos(:,j) + link_length * [cos(theta_accum); sin(theta_accum)];
                     link_center(:,j) = (joint_pos(:,j+1)+joint_pos(:,j))/2;
@@ -181,12 +181,12 @@ classdef RobotState
                 end
 
                 if all(isConverged)
-%                     fprintf("모든 링크가 수렴하여 회전을 멈췄습니다. (iter = %d)\n", i);
+%                     fprintf("All links are converged. Stop rotation. (iter = %d)\n", i);
                     break;
                 end
 
                 if i == maxIter
-                    warning("최대 반복 횟수에 도달하였습니다. 수렴하지 않았을 수 있습니다.");
+                    warning("Reached the maximum iteration. It might not be converged");
                 end
             end
 
@@ -200,7 +200,7 @@ classdef RobotState
             link_center = zeros(2, num_links);
             theta_accum = 0; % required for calculating a center of each link
 
-            r_ext = [r; -0.00165];
+            r_ext = [r; -0.0015];
 
             % data storage
             T_m = zeros(1, num_links);
@@ -271,7 +271,6 @@ classdef RobotState
 
                     else
                         if T_sum_storage(i,j) > 0
-
                             if T_sum_storage(i-1, j) <= 0
                                 theta_link(j) = theta_link(j);
                                 isConverged = true;
@@ -297,12 +296,12 @@ classdef RobotState
                 end
 
                 if all(isConverged)
-%                     fprintf("모든 링크가 수렴하여 회전을 멈췄습니다. (iter = %d)\n", i);
+%                     fprintf("All links are converged. Stop rotation. (iter = %d)\n", i);
                     break;
                 end
 
                 if i == maxIter
-                    warning("최대 반복 횟수에 도달하였습니다. 수렴하지 않았을 수 있습니다.");
+                    warning("Reached maximum iteration. It might not be converged.");
                 end
             end
 
