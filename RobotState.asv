@@ -46,7 +46,7 @@ classdef RobotState
             link_center = [x_link_center; y_link_center];
 
         end
-% 
+
         function draw_plot(obj, num_links, link_length, theta_link, theta_M)
 
             figure;
@@ -94,15 +94,11 @@ classdef RobotState
 
             % check if it is converged or not
 
-            maxIter = 2e+3;
+            maxIter = 1e+3;
             isConverged  = false(1, num_links);
-%             torqueTolerance = 1e-8;
+            torqueTolerance = 1e-8;
 
-            T_m_add_storage = zeros(maxIter, num_links);
-            T_s_storage = zeros(maxIter, num_links);
-            T_sum_storage = zeros(maxIter, num_links);
-
-            dtheta = 0.002; % about 0.0573 degree
+            dtheta = 0.01; % about 0.0573 degree
 
             for i=1:maxIter
 
@@ -129,59 +125,53 @@ classdef RobotState
                         T_s(j) = k_spring(j)*theta_link(j);
 
                     end
-
+                    % calculate net Torque
+%                     disp(j)
+%                     disp(T_m_eq)
+%                     disp(T_s(j))
                     T_sum(j) = T_m_eq - T_s(j);
-                    T_m_add_storage(i,j) = T_m_eq;
-                    T_s_storage(i,j) = T_s(j);
-                    T_sum_storage(i,j) = T_sum(j);
+%                     disp(T_sum(j))
 
                 end
 
                 theta_accum = 0;
 
-                for j=1:num_links
+                for j = 1:num_links
+                    % 이미 수렴하여 멈춘 링크라면 넘어감
+                    if isConverged(j)
+                        continue;
+                    end
 
-                    if i == 1
+                    % netTorque가 양수 -> +dtheta
+                    if T_sum(j) > 0
+                        theta_link(j) = theta_link(j) + dtheta;
 
-                        if T_sum_storage(i,j) > 0
-                            theta_link(j) = theta_link(j) + dtheta;
+                        % 만약 이전 사이클에서 음수였다가 이번에 양수가 됐다면(부호 변화)
+                        % 혹은 토크가 0 근처라면, 이제 멈춤으로 처리
+                        % (부호 바뀌는 판정은 필요에 따라 세부적으로 구현)
+                        %
+                        % 예시: 절댓값이 매우 작으면 멈춤
+                        if abs(T_sum(j)) < torqueTolerance
+                            isConverged(j) = true;
+                        end
 
-                        elseif T_sum_storage(i,j) < 0
-                            theta_link(j) = theta_link(j) - dtheta;
+                        % netTorque가 음수 -> -dtheta
+                    elseif T_sum(j) < 0
+                        theta_link(j) = theta_link(j) - dtheta;
 
-                        else
+                        % 부호 변화 혹은 토크가 0 근처라면 멈춤
+                        if abs(T_sum(j)) < torqueTolerance
                             isConverged(j) = true;
                         end
 
                     else
-                        if T_sum_storage(i,j) > 0
-
-                            if T_sum_storage(i-1, j) <= 0
-                                theta_link(j) = theta_link(j);
-                                isConverged = true;
-                            else
-                                theta_link(j) = theta_link(j) + dtheta;
-                            end
-
-                        elseif T_sum_storage(i,j) < 0
-                            if T_sum_storage(i-1,j) >= 0
-                                theta_link(j) = theta_link(j);
-                                isConverged = true;
-                            else
-                                theta_link(j) = theta_link(j) - dtheta;
-                            end
-
-                        else
-                            isConverged = true;
-
-                        end
-
+                        % 토크가 정확히 0 근처라면(또는 0이 되면) 이미 평형점
+                        isConverged(j) = true;
                     end
-
                 end
 
                 if all(isConverged)
-%                     fprintf("모든 링크가 수렴하여 회전을 멈췄습니다. (iter = %d)\n", i);
+                    fprintf("모든 링크가 수렴하여 회전을 멈췄습니다. (iter = %d)\n", iter);
                     break;
                 end
 
@@ -194,7 +184,7 @@ classdef RobotState
 
         function [T_m, T_s, T_sum] = Get_Tau(~, num_links, link_length, M, theta_M, r, k_spring, EM2)
 
-            % requisites for calculating torques
+                        % requisites for calculating torques
             theta_link = zeros(1, num_links);
             joint_pos = zeros(2, num_links+1);
             link_center = zeros(2, num_links);
@@ -209,15 +199,15 @@ classdef RobotState
 
             % check if it is converged or not
 
-            maxIter = 2e+3;
+            maxIter = 1e+3;
             isConverged  = false(1, num_links);
-%             torqueTolerance = 1e-10;
+            torqueTolerance = 1e-10;
 
             T_m_add_storage = zeros(maxIter, num_links);
             T_s_storage = zeros(maxIter, num_links);
             T_sum_storage = zeros(maxIter, num_links);
 
-            dtheta = 0.002; % about 0.0573 degree
+            dtheta = 0.01; % about 0.0573 degree
 
             for i=1:maxIter
 
@@ -246,7 +236,7 @@ classdef RobotState
                     end
                     % calculate net Torque
                     T_sum(j) = T_m_eq - T_s(j);
-
+                    
                     T_m_add_storage(i,j) = T_m_eq;
                     T_s_storage(i,j) = T_s(j);
                     T_sum_storage(i,j) = T_sum(j);
@@ -254,6 +244,43 @@ classdef RobotState
                 end
 
                 theta_accum = 0;
+
+%                 for j = 1:num_links
+%                     % 이미 수렴하여 멈춘 링크라면 넘어감
+%                     if isConverged(j)
+%                         continue;
+%                     end
+% 
+%                     % netTorque가 양수 -> +dtheta
+%                     if T_sum(j) > 0
+%                         theta_link(j) = theta_link(j) + dtheta;
+% 
+%                         % 만약 이전 사이클에서 음수였다가 이번에 양수가 됐다면(부호 변화)
+%                         % 혹은 토크가 0 근처라면, 이제 멈춤으로 처리
+%                         % (부호 바뀌는 판정은 필요에 따라 세부적으로 구현)
+%                         %
+%                         % 예시: 절댓값이 매우 작으면 멈춤
+%                         if j > 1
+%                             if T_sum(j-1) < 0
+%                                 isConverged(j) = true;
+%                             end
+%                             
+%                         end
+% 
+%                         % netTorque가 음수 -> -dtheta
+%                     elseif T_sum(j) < 0
+%                         theta_link(j) = theta_link(j) - dtheta;
+% 
+%                         % 부호 변화 혹은 토크가 0 근처라면 멈춤
+%                         if T_sum(j-1) > 0
+%                             isConverged(j) = true;
+%                         end
+% 
+%                     elseif T_sum(j)
+%                         % 토크가 정확히 0 근처라면(또는 0이 되면) 이미 평형점
+%                         isConverged(j) = true;
+%                     end
+%                 end
 
                 for j=1:num_links
 
@@ -296,8 +323,10 @@ classdef RobotState
 
                 end
 
+                disp(isConverged)
+
                 if all(isConverged)
-%                     fprintf("모든 링크가 수렴하여 회전을 멈췄습니다. (iter = %d)\n", i);
+                    fprintf("모든 링크가 수렴하여 회전을 멈췄습니다. (iter = %d)\n", i);
                     break;
                 end
 
