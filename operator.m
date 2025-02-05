@@ -1,4 +1,5 @@
 %% operator version-- 2
+% you should run section
 
 clear; clc; close all
 
@@ -8,7 +9,7 @@ link_length = 2e-3; % 2 mm length of each link
 psi_init = 5000 * (7 * rand(1,num_links) + 1);          % magnetization profile [A/m]
 theta_M_init = [pi/3, pi/4 * (2* rand(1, num_links-1) - 1)];      % magnetization angle [rad]
 
-r_ext = 30e-3;  % from center of an external magnet to the first joint in x direction
+r_ext = 45e-3;  % from center of an external magnet to the first joint in x direction
 cross_section_area = 0.003*0.0005;     % cross section area of each part
 k_spring = 2.5e-06 * ones(1,7);            % spring constants of all joints
 
@@ -21,11 +22,11 @@ RS = RobotState();
 x_init = [psi_init, theta_M_init];
 
 % optimizing boundaries
-lb = [[40000, repmat(5e03, 1, num_links-1)], [pi/3, 0, repmat(-pi, 1, num_links-2)]];
-ub = [[50000, repmat(5e04, 1, num_links-1)], [pi/2, repmat(pi, 1, num_links-1)]];
+lb = [[40000, repmat(5e03, 1, num_links-1)], [pi/3, repmat(-pi, 1, num_links-1)]];
+ub = [[50000, repmat(5e04, 1, num_links-1)], [pi/2, repmat(pi, 1, num_links-2), 0]];
 
 % optimized parameters storage
-num_iterations = 20; % iterations
+num_iterations = 2; % iterations
 x_results = zeros(num_iterations, length(x_init));
 cost_values = zeros(num_iterations, 1);
 
@@ -78,29 +79,40 @@ toc;
 
 %% forward test version --2
 
-% clear; clc; close all
-% 
-% num_links = 7;  % # of links
-% link_length = 2e-3; % 2 mm length of each link
-% 
-% psi_init = [25000 29000 25000 23000 21000 20000 15000];          % magnetization profile [A/m]
-% theta_M_init = [pi/2 pi/3 pi/3 -pi/4 -pi/4 -pi/3 -pi/3];      % magnetization angle [rad]
-% 
-% r_ext = 30e-3;  % from center of an external magnet to the first joint in x direction
-% cross_section_area = 0.003*0.0005;     % cross section area of each part
-% k_spring = 1e-05 * ones(1,num_links);            % spring constants of all joints
-% 
-% % build class objects
-% cf = cost_function();
-% em2 = External_Magnet2();
-% RS = RobotState();
-% 
-% x_init = [psi_init, theta_M_init];
-% 
-% M_opt = x_init(1:num_links) * cross_section_area * link_length;
-% theta_opt = RS.Get_Link_Angle(num_links, link_length, M_opt, x_init(num_links+1:end), r_ext, k_spring, em2);
-% 
-% % [T_m, T_s, T_sum] = RS.Get_Tau(num_links, link_length, M_opt, x_init(num_links+1:end), r_ext, k_spring, em2);
-% 
-% RS.draw_plot(num_links, link_length, theta_opt, x_init(num_links+1:end))
+
+clear; clc; close all
+
+num_links = 7;  % # of links
+link_length = 2e-3; % 2 mm length of each link
+
+% psi_init = [44000 31000 16000 48000 24000 50000 40000];         % magnetization profile [A/m]
+psi_init = [44000 31000 16000 48000 24000 50000 40000];
+theta_M_init = deg2rad([75 62 -40 -100 -95 -91 -80]);      % magnetization angle [rad]
+% theta_M_init = [pi/2 pi/2 pi/2 -pi/2 -pi/2 -pi/2 -pi/2];
+
+r_ext = 45e-3;  % from center of an external magnet to the first joint in x direction
+cross_section_area = 0.003*0.0005;     % cross section area of each part
+k_spring = 2.5e-06 * ones(1,num_links);            % spring constants of all joints
+
+% build class objects
+cf = cost_function();
+em2 = External_Magnet2();
+RS = RobotState();
+
+x_init = [psi_init, theta_M_init];
+
+M_opt = x_init(1:num_links) * cross_section_area * link_length;
+theta_opt = RS.Get_Link_Angle(num_links, link_length, M_opt, x_init(num_links+1:end), r_ext, k_spring, em2);
+
+[T_m, T_s, T_sum, isConverged] = RS.Get_Tau(num_links, link_length, M_opt, x_init(num_links+1:end), r_ext, k_spring, em2);
+
+RS.draw_plot(num_links, link_length, theta_opt, x_init(num_links+1:end))
+
+%%
+
+em2 = External_Magnet2;
+
+r = [0.044; -0.001587];
+
+B = em2.Cal_B_Field(r);
 

@@ -61,6 +61,7 @@ classdef cost_function
             end
 
             ceq = y_joint_pos(end);
+%             c = y_joint_pos(5) - 0.004;
 
         end
 
