@@ -1,0 +1,6 @@
+#ifndef RTW_HEADER_MagneticBasket_Simscape_Optimizer_capi_h_
+#define RTW_HEADER_MagneticBasket_Simscape_Optimizer_capi_h_
+#include "MagneticBasket_Simscape_Optimizer.h"
+extern void MagneticBasket_Simscape_Optimizer_InitializeDataMapInfo ( void )
+;
+#endif

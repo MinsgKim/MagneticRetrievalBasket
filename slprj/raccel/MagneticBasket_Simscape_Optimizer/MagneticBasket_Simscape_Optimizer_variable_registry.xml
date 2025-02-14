@@ -1,0 +1,336 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<MF0 version="1.1" packageUris="http://schema.mathworks.com/mf0/slsa_mm_parameter_tuning/R2021b">
+  <slsa.mm.parametertuning.VariableRegistry type="slsa.mm.parametertuning.VariableRegistry" uuid="99f876d7-854f-4bb2-bd33-d2ad9f494a23">
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="88e688c0-3142-4857-a5cf-2d0706628cc6">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator1/Magnet DipoleMoment</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="bea59ece-21c3-4a9e-a536-8fd10339f551">
+        <className>double</className>
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="8e0612ae-115c-47f2-96bc-767e77cdbba2">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator1/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector2</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="5e4853c0-8712-490b-bc08-2b92aa1f1918">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator7/Magnet DipoleMoment</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="160a85e9-be1d-4d6a-84c8-63077d33fad5">
+        <className>double</className>
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="e60a11ac-40da-4660-a4d9-e705ecfeec17">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator2/Magnet DipoleMoment</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="4e64449d-ffe3-4297-89a2-93ad851bb734">
+        <className>double</className>
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="24eebeed-77d2-455a-a849-0e231b3632ed">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator3/Magnet DipoleMoment</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="58b1b892-542f-4a2b-8bf9-a2ea4f4fb094">
+        <className>double</className>
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="033f0477-1f43-481f-a049-9f3d544e06c6">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator4/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/a elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="43d2c69a-7e6b-4fff-bdb1-597ba3abd5aa">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator4/Magnet DipoleMoment</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="bc8f8828-7bd1-4edc-a5a3-5383d3b4b1b3">
+        <className>double</className>
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="f5b11ba5-0b68-4f8b-9d55-37d68b8ba780">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator5/Magnet DipoleMoment</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="b696ab0d-5536-4cb0-931b-4eb01492e474">
+        <className>double</className>
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="c1dc4b67-de12-4600-8931-8779173cae33">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator6/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector3</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="0112c980-d5f5-4d47-8013-3666c618a756">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator6/Magnet DipoleMoment</blockPath>
+      <parameterName>Value</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <valueAttributes type="slsa.mm.parametertuning.ValueAttributes" uuid="f9b7b3bf-f5b9-4f7e-88a0-98531cd49f48">
+        <className>double</className>
+        <dimensions>1</dimensions>
+        <dimensions>3</dimensions>
+      </valueAttributes>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="6831901c-025b-449a-bbe5-5694b97ff443">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator1/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector3</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="06906026-ddd2-48c5-ad73-a5fb5b53176e">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator4/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/b elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="c65071a0-7f32-4039-970b-7bd936f26e6d">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator1/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/a elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="edd7309f-e815-4d8e-b13c-8d77884317e7">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator6/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/b elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="edebccdc-da44-4c1f-b91b-b858ade4df13">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator1/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/b elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="a315eb22-f0a5-408a-9586-f14c50ff0170">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator5/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector2</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="a3c14d48-3bd3-44e4-bbfe-5fa14e78a193">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator2/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector3</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="e3217bd9-8614-400e-8a75-fd5572ace0c3">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator2/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector2</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="f2e7219f-fd64-4d83-beb6-8ebdd714cbe3">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator2/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/a elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="c7d681b6-ca91-4eb1-91c4-52c3ca4e7320">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator6/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector2</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="47230aca-5598-4ae8-a2c3-2454dfdc8e64">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator2/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/b elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="b64ddf90-1cb2-4554-9b9c-15129d8b0a7b">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator3/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector2</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="cac5e287-9aba-4c86-8803-c9e2b2ab3c26">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator5/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/a elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="8a4b0941-e88d-4d73-ac1c-b3255839d7f1">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator3/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector3</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="25679089-71e6-4a24-9114-c10e3b50e5c1">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator3/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/a elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="bf25695a-13a9-48e5-834c-2890b649ebfe">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator3/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/b elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="d1cc2f25-c54a-4785-bf31-eb6d349343c5">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator4/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector2</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="4d2bdbd6-2037-4cca-abc6-b1b19e254ef1">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator5/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/b elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="0dda7bec-6d43-44f1-b27c-5926aa5699e3">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator4/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector3</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="12bf6679-e333-4665-816e-fcc1e1483608">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator5/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector3</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="e9220216-2117-48a4-9892-ee6c47b76362">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator6/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/a elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="96fd59a5-c542-41b3-a0b1-7dfebfd769c1">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator7/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector2</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="f0e01f7c-910e-4d2c-9702-e0c5b8ec2f5c">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator7/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/Selector3</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="14e4edff-274b-4fba-86c8-6fcb19be3aa0">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator7/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/a elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <blockParameters type="slsa.mm.parametertuning.BlockParameter" uuid="0979fa7a-3708-4d8e-9126-d9b295229ea1">
+      <blockPath>MagneticBasket_Simscape_Optimizer/Subsystem1/Magnetic Torque//Force Generator7/Calculate Magnetic Force//Torque/Magnetic Torque/Cross Product/b elements</blockPath>
+      <parameterName>IndicesForEval</parameterName>
+      <expression type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <isTunable>false</isTunable>
+    </blockParameters>
+    <expressions type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177">
+      <expression>[Fixed.MagnetDirection 0]*Fixed.MagnetMagnitude</expression>
+      <fieldReferences type="slsa.mm.parametertuning.FieldReference" uuid="563b50f9-399b-4c70-8d17-03846c84fbb1"/>
+      <fieldReferences type="slsa.mm.parametertuning.FieldReference" uuid="bbee7e16-baf3-4159-8361-988c3785dbf7"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="88e688c0-3142-4857-a5cf-2d0706628cc6"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="5e4853c0-8712-490b-bc08-2b92aa1f1918"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="e60a11ac-40da-4660-a4d9-e705ecfeec17"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="24eebeed-77d2-455a-a849-0e231b3632ed"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="43d2c69a-7e6b-4fff-bdb1-597ba3abd5aa"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="f5b11ba5-0b68-4f8b-9d55-37d68b8ba780"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="0112c980-d5f5-4d47-8013-3666c618a756"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="50e8255d-0f39-4ec1-850b-848640b983a4"/>
+    </expressions>
+    <expressions type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c">
+      <expression>cellfun(@(x)cast(x,&apos;int32&apos;),{([4 5 6])},&apos;UniformOutput&apos;,0)</expression>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="f0e01f7c-910e-4d2c-9702-e0c5b8ec2f5c"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="6831901c-025b-449a-bbe5-5694b97ff443"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="a3c14d48-3bd3-44e4-bbfe-5fa14e78a193"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="12bf6679-e333-4665-816e-fcc1e1483608"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="8a4b0941-e88d-4d73-ac1c-b3255839d7f1"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="0dda7bec-6d43-44f1-b27c-5926aa5699e3"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="c1dc4b67-de12-4600-8931-8779173cae33"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="fc03d28d-e0ca-4ad3-9a39-cdb3954819ca"/>
+    </expressions>
+    <expressions type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf">
+      <expression>cellfun(@(x)cast(x,&apos;int32&apos;),{([1 2 3])},&apos;UniformOutput&apos;,0)</expression>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="96fd59a5-c542-41b3-a0b1-7dfebfd769c1"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="b64ddf90-1cb2-4554-9b9c-15129d8b0a7b"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="8e0612ae-115c-47f2-96bc-767e77cdbba2"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="a315eb22-f0a5-408a-9586-f14c50ff0170"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="e3217bd9-8614-400e-8a75-fd5572ace0c3"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="d1cc2f25-c54a-4785-bf31-eb6d349343c5"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="c7d681b6-ca91-4eb1-91c4-52c3ca4e7320"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="fc03d28d-e0ca-4ad3-9a39-cdb3954819ca"/>
+    </expressions>
+    <expressions type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2">
+      <expression>cellfun(@(x)cast(x,&apos;int32&apos;),{([2 3 1 3 1 2])},&apos;UniformOutput&apos;,0)</expression>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="c65071a0-7f32-4039-970b-7bd936f26e6d"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="cac5e287-9aba-4c86-8803-c9e2b2ab3c26"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="f2e7219f-fd64-4d83-beb6-8ebdd714cbe3"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="25679089-71e6-4a24-9114-c10e3b50e5c1"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="033f0477-1f43-481f-a049-9f3d544e06c6"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="e9220216-2117-48a4-9892-ee6c47b76362"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="14e4edff-274b-4fba-86c8-6fcb19be3aa0"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="fc03d28d-e0ca-4ad3-9a39-cdb3954819ca"/>
+    </expressions>
+    <expressions type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d">
+      <expression>cellfun(@(x)cast(x,&apos;int32&apos;),{([3 1 2 2 3 1])},&apos;UniformOutput&apos;,0)</expression>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="edd7309f-e815-4d8e-b13c-8d77884317e7"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="4d2bdbd6-2037-4cca-abc6-b1b19e254ef1"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="edebccdc-da44-4c1f-b91b-b858ade4df13"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="bf25695a-13a9-48e5-834c-2890b649ebfe"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="47230aca-5598-4ae8-a2c3-2454dfdc8e64"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="06906026-ddd2-48c5-ad73-a5fb5b53176e"/>
+      <users type="slsa.mm.parametertuning.BlockParameter" uuid="0979fa7a-3708-4d8e-9126-d9b295229ea1"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="fc03d28d-e0ca-4ad3-9a39-cdb3954819ca"/>
+    </expressions>
+    <fieldReferences type="slsa.mm.parametertuning.FieldReference" uuid="563b50f9-399b-4c70-8d17-03846c84fbb1">
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <fieldName>Fixed.MagnetMagnitude</fieldName>
+      <variable type="slsa.mm.parametertuning.Variable" uuid="50e8255d-0f39-4ec1-850b-848640b983a4"/>
+    </fieldReferences>
+    <fieldReferences type="slsa.mm.parametertuning.FieldReference" uuid="bbee7e16-baf3-4159-8361-988c3785dbf7">
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <fieldName>Fixed.MagnetDirection</fieldName>
+      <variable type="slsa.mm.parametertuning.Variable" uuid="50e8255d-0f39-4ec1-850b-848640b983a4"/>
+    </fieldReferences>
+    <name>MagneticBasket_Simscape_Optimizer</name>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="307ebd52-d828-436b-983a-585b8639b20f">
+      <name>SimParams</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="f28bf173-3205-4b7e-b02b-34a96a9b4907"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="50e8255d-0f39-4ec1-850b-848640b983a4">
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="fdd0bb89-f370-4ccf-87f4-829ce9c9e177"/>
+      <fieldReferences type="slsa.mm.parametertuning.FieldReference" uuid="563b50f9-399b-4c70-8d17-03846c84fbb1"/>
+      <fieldReferences type="slsa.mm.parametertuning.FieldReference" uuid="bbee7e16-baf3-4159-8361-988c3785dbf7"/>
+      <name>Fixed</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="f28bf173-3205-4b7e-b02b-34a96a9b4907"/>
+    </variables>
+    <variables type="slsa.mm.parametertuning.Variable" uuid="fc03d28d-e0ca-4ad3-9a39-cdb3954819ca">
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="ecd0daa8-326c-46e2-99c6-33776b03e78d"/>
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="69585c36-fdd9-4711-a225-ab21e32661e2"/>
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="97e225a9-05b1-4b51-b2d7-901fdfa4175c"/>
+      <expressions type="slsa.mm.parametertuning.Expression" uuid="97e0af9a-7b59-4216-9621-8eee032155cf"/>
+      <name>x</name>
+      <workspace type="slsa.mm.parametertuning.Workspace" uuid="f28bf173-3205-4b7e-b02b-34a96a9b4907"/>
+    </variables>
+    <workspaces type="slsa.mm.parametertuning.Workspace" uuid="f28bf173-3205-4b7e-b02b-34a96a9b4907">
+      <name>global-workspace</name>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="307ebd52-d828-436b-983a-585b8639b20f"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="50e8255d-0f39-4ec1-850b-848640b983a4"/>
+      <variables type="slsa.mm.parametertuning.Variable" uuid="fc03d28d-e0ca-4ad3-9a39-cdb3954819ca"/>
+    </workspaces>
+  </slsa.mm.parametertuning.VariableRegistry>
+</MF0>
