@@ -1,0 +1,209 @@
+minseong
+suho@suho:~/lbr-stack2/godirect-example-main/python$ python3 magnet_test.py
+wait for bluetooth initialization...
+/home/suho/.local/lib/python3.10/site-packages/godirect/backend_bleak.py:21: FutureWarning: The discover function will removed in a future version, use BleakScanner.discover instead.
+  bleak_devices = await discover()
+/home/suho/.local/lib/python3.10/site-packages/godirect/backend_bleak.py:28: FutureWarning: BLEDevice.rssi is deprecated and will be removed in a future version of Bleak, use AdvertisementData.rssi instead
+  device.rssi = d.rssi
+attempting to open 1 device(s)...
+open device 0 = True
+[INFO] [1742986979.737330415] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742986979.738132140] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742986984.496455628] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 1: Bx = -10.6361, By = 0.1635, Bz = -0.3656, Norm = 10.6436
+[INFO] [1742986987.677996451] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742986987.678525290] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742986991.796511066] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 2: Bx = -8.3315, By = 0.1880, Bz = -0.3378, Norm = 8.3405
+[INFO] [1742986995.000145206] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742986995.000569386] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742986999.656201266] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 3: Bx = -7.7908, By = 0.1586, Bz = -0.2480, Norm = 7.7964
+[INFO] [1742987002.836184169] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987002.836672438] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987006.765823282] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 4: Bx = -7.7843, By = 0.1537, Bz = -0.2349, Norm = 7.7894
+[INFO] [1742987009.949019480] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987009.949546718] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987013.846706864] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 5: Bx = -7.3498, By = 0.1112, Bz = -0.2121, Norm = 7.3537
+[INFO] [1742987017.030555532] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987017.031137437] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987021.096463696] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 6: Bx = -6.9431, By = 0.0638, Bz = -0.2562, Norm = 6.9481
+[INFO] [1742987024.269363710] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987024.269906945] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987028.577072353] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 7: Bx = -6.3372, By = 0.1716, Bz = -0.2774, Norm = 6.3456
+[INFO] [1742987031.767502704] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987031.768125752] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987035.907377847] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 8: Bx = -5.8994, By = 0.2190, Bz = -0.3248, Norm = 5.9124
+[INFO] [1742987039.088645265] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987039.089085811] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987043.236727594] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 9: Bx = -5.8472, By = 0.1667, Bz = -0.2790, Norm = 5.8562
+[INFO] [1742987046.417590244] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987046.418117301] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987050.706067435] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 10: Bx = -5.2902, By = 0.1390, Bz = -0.1369, Norm = 5.2938
+[INFO] [1742987053.908420484] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987053.908858498] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987057.918047068] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 11: Bx = -5.1056, By = 0.0932, Bz = -0.0879, Norm = 5.1072
+[INFO] [1742987061.108411658] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987061.108879465] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987065.236936172] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 12: Bx = -5.0076, By = 0.0377, Bz = -0.2006, Norm = 5.0118
+[INFO] [1742987068.433744230] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987068.434439362] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987072.566280856] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 13: Bx = -4.6761, By = 0.1030, Bz = -0.2055, Norm = 4.6817
+[INFO] [1742987075.756729552] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987075.757154642] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987079.826282587] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 14: Bx = -4.6401, By = 0.1030, Bz = -0.2023, Norm = 4.6456
+[INFO] [1742987083.007723874] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987083.008173848] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987087.196126726] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 15: Bx = -4.2873, By = 0.0867, Bz = -0.1304, Norm = 4.2902
+[INFO] [1742987090.378379973] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987090.378792099] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987094.436922613] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 16: Bx = -3.9852, By = 0.0589, Bz = -0.0683, Norm = 3.9862
+[INFO] [1742987097.643739413] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987097.644344324] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987101.717155017] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 17: Bx = -3.7990, By = 0.1422, Bz = -0.1369, Norm = 3.8041
+[INFO] [1742987104.901688358] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987104.902419906] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987109.366568475] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 18: Bx = -3.5670, By = 0.1194, Bz = -0.1304, Norm = 3.5714
+[INFO] [1742987112.563273718] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987112.563822634] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987116.986897121] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 19: Bx = -3.5344, By = 0.1079, Bz = -0.1451, Norm = 3.5390
+[INFO] [1742987120.171032560] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987120.171405096] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987124.497416116] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 20: Bx = -3.3286, By = 0.1096, Bz = -0.0879, Norm = 3.3316
+[INFO] [1742987127.680635136] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987127.681140018] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987131.747028170] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 21: Bx = -3.1652, By = 0.1292, Bz = -0.0585, Norm = 3.1684
+[INFO] [1742987134.937731297] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987134.938261874] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987138.867375301] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 22: Bx = -3.0411, By = 0.0785, Bz = -0.1206, Norm = 3.0445
+[INFO] [1742987142.053112825] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987142.053990169] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987146.387207172] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 23: Bx = -2.9447, By = 0.1177, Bz = -0.1092, Norm = 2.9491
+[INFO] [1742987149.570526918] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987149.571079297] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987153.477290221] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 24: Bx = -2.7847, By = 0.1079, Bz = -0.1239, Norm = 2.7895
+[INFO] [1742987156.661820403] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987156.662303744] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987160.816508890] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 25: Bx = -2.7504, By = 0.0981, Bz = -0.1026, Norm = 2.7541
+[INFO] [1742987164.004134433] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987164.004726928] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987168.437524673] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 26: Bx = -2.6115, By = 0.0606, Bz = -0.0765, Norm = 2.6133
+[INFO] [1742987171.609232289] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987171.609678850] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987175.748067786] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 27: Bx = -2.5152, By = 0.0687, Bz = -0.0700, Norm = 2.5171
+[INFO] [1742987178.943084215] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987178.944036895] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987183.347441116] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 28: Bx = -2.3257, By = 0.0900, Bz = -0.0618, Norm = 2.3283
+[INFO] [1742987186.539907919] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987186.540386500] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987190.437661890] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 29: Bx = -2.2571, By = 0.0753, Bz = -0.0438, Norm = 2.2588
+[INFO] [1742987193.608784266] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987193.609290832] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987197.747362971] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 30: Bx = -2.1591, By = 0.0965, Bz = -0.0504, Norm = 2.1618
+[INFO] [1742987200.922790180] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987200.923382928] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987204.907938906] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 31: Bx = -2.0938, By = 0.0834, Bz = -0.0259, Norm = 2.0956
+[INFO] [1742987208.092511856] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987208.093246056] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987212.448485118] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 32: Bx = -2.0219, By = 0.0557, Bz = -0.0651, Norm = 2.0237
+[INFO] [1742987215.631519405] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987215.632080222] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987219.717712694] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 33: Bx = -1.9778, By = 0.0687, Bz = -0.0700, Norm = 1.9802
+[INFO] [1742987222.913310983] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987222.914180664] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987227.419680526] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 34: Bx = -1.8373, By = 0.0769, Bz = -0.0193, Norm = 1.8390
+[INFO] [1742987230.602754001] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987230.603217237] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987234.647108837] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 35: Bx = -1.8324, By = 0.0687, Bz = -0.0406, Norm = 1.8341
+[INFO] [1742987237.831042173] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987237.831485955] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987241.889209493] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 36: Bx = -1.7442, By = 0.0753, Bz = -0.0536, Norm = 1.7466
+[INFO] [1742987245.096006826] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987245.096651071] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987248.897910729] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 37: Bx = -1.6789, By = 0.0671, Bz = -0.0422, Norm = 1.6808
+[INFO] [1742987252.079308524] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987252.079849416] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987256.157561468] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 38: Bx = -1.5776, By = 0.0736, Bz = -0.0406, Norm = 1.5798
+[INFO] [1742987259.339552608] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987259.340003150] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987263.246745041] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 39: Bx = -1.5613, By = 0.0622, Bz = -0.0063, Norm = 1.5626
+[INFO] [1742987266.441023941] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987266.441526429] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987270.527953162] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 40: Bx = -1.5401, By = 0.0524, Bz = -0.0112, Norm = 1.5410
+[INFO] [1742987273.709488835] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987273.710049701] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987277.798086432] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 41: Bx = -1.4943, By = 0.0687, Bz = -0.0161, Norm = 1.4960
+[INFO] [1742987280.980464823] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987280.981007167] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987284.847376213] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 42: Bx = -1.4176, By = 0.0785, Bz = -0.0095, Norm = 1.4198
+[INFO] [1742987288.029432937] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987288.029948385] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987292.087501280] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 43: Bx = -1.3539, By = 0.0687, Bz = -0.0226, Norm = 1.3558
+[INFO] [1742987295.274404201] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987295.274933081] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987299.447136404] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 44: Bx = -1.2755, By = 0.0540, Bz = -0.0275, Norm = 1.2769
+[INFO] [1742987302.632539984] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987302.633007870] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987306.747309472] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 45: Bx = -1.2689, By = 0.0557, Bz = -0.0210, Norm = 1.2703
+[INFO] [1742987309.938884575] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987309.939320561] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987313.957977726] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 46: Bx = -1.2314, By = 0.0589, Bz = -0.0014, Norm = 1.2328
+[INFO] [1742987317.155126347] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987317.155736849] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987321.397259590] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 47: Bx = -1.1824, By = 0.0900, Bz = 0.0003, Norm = 1.1858
+[INFO] [1742987324.580822887] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987324.581349971] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987328.637436399] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 48: Bx = -1.1579, By = 0.0442, Bz = 0.0052, Norm = 1.1588
+[INFO] [1742987331.819477557] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987331.819919348] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987336.317432483] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 49: Bx = -1.1089, By = 0.0524, Bz = -0.0063, Norm = 1.1102
+[INFO] [1742987339.495076543] [lbr.move_group_action_client_node]: MoveGroup goal accepted.
+[INFO] [1742987339.495694366] [lbr.move_group_action_client_node]: Waiting for result...
+[INFO] [1742987343.537275129] [lbr.move_group_action_client_node]: MoveGroup action succeeded.
+Point 50: Bx = -1.0860, By = 0.0753, Bz = 0.0068, Norm = 1.0886

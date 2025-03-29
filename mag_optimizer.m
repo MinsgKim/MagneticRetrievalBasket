@@ -95,35 +95,4 @@ PlayVideo(Data_Test, Funs, Test.DM_HC, "FrameNum", 50, "Record", "no")
 % 
 % PlayVideo(Data_Optim, Funs, Optim.DipoleMoment_HomeConfig, "FrameNum", 50, "Record", "no")
 
-%% Fabrication Parameter Decision
-clear; clc;
-
-
-% sample dimension
-w = 3.2;
-l = 2.1;
-t = 0.5;
-
-% magnetization angles
-theta_M = deg2rad([20 25 30 35 45 55]);
-
-% manually changeable param
-n = 4;
-
-% design parameters;
-
-l_proj = n*t*cos(theta_M)+l*sin(theta_M);
-
-h1 = n*t./sin(theta_M);
-
-eps = 0.3;
-a1 = 0.03.*l_proj;
-a2 = 0.2;
-
-h2 = l_proj.*cot(theta_M)+n*t.*sin(theta_M) + eps;
-
-h3 = h2-(a2+n*t)./sin(theta_M);
-
-l_proj2 = l_proj-a1;
-
 
