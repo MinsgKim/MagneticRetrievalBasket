@@ -22,7 +22,6 @@ problem = createOptimProblem('fmincon',...
     'objective', @(x) Simscape_Fitness(x, SimParams, Fixed),...
     'options', options);
 
-
 gs = GlobalSearch;
 
 tic;
@@ -87,3 +86,28 @@ plot(t, M)
 
 values = [min(M), max(M(2:end)), mean(M(2:end))];
 disp(values)
+
+%%
+
+% B_small_1 = [-0.072391; 0.1129425; 0.02058] * 1e-3;
+% B_small_2 = [-0.0318769; -0.104541; -0.0023366] * 1e-3;
+
+B = [-0.04; -0.01; -0.01]*1e-3;
+
+r = [10.5+0.3; 10; 0] * 1e-3;
+r_hat = r/norm(r);
+
+mu = 4*pi*1e-7;
+
+A = mu/(4*pi*norm(r)^3)*(3*(r_hat*r_hat')-eye(3,3));
+
+M_1 = inv(A) * B_small_1;
+M_2 = inv(A) * B_small_2;
+
+M_norm_1 = norm(M_1);
+M_norm_2 = norm(M_2);
+
+M = inv(A) * B;
+
+M_norm = norm(M);
+disp(M_norm)
