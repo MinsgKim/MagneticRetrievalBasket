@@ -1,9 +1,9 @@
 clear;clc;
 Sim = Call_MagneticBasket_Params;
 open("Optimization_250328.slx")
-% open("Calibration_250328.slx")
+open("Calibration_250328.slx")
 
-%% Example
+%% Example 
 % 예를 들어 입력 변수가 Plate들의 각도라면 Call_MagnetBasket_Params안의 값을 바꾸지 말고
 % Sim = Call_MagneticBasket_Params; 이렇게 불러온 후 Sim.Angle = ~ 바꾸면됨
 % Sim_Optimization/Sim_Calibration이 Simulink 실행시키는 함수, 반환하는 값은 Plate의 각도(rad)
@@ -12,14 +12,27 @@ open("Optimization_250328.slx")
 % 나중에 최적화할때는 Sim_Optimization/Calibration Options 다 끄면됨(GUI, DisInfo)
 
 %% Optimization
-Sim.Angle = deg2rad([25 30 45 -45 -35 -25]);
+% Sim.Angle = deg2rad([25 30 45 -45 -35 -25]);
 % Sim.Angle = deg2rad([90 90 90 -90 -90 -90]);
+% Sim.Angle = deg2rad([84.4715   80.9669   79.3928  -75.4433  -78.0180  -83.8258]);
+% Sim.Angle = deg2rad([85 80 80 -75 -80 -85]);
+% Sim.Angle = deg2rad(linspace(10, 170, 6));
+% Sim.Angle = deg2rad([73.1960   62.4226   57.4241  -56.9934  -62.2620  -73.2091]);
+% Sim.Angle = deg2rad([75   60   55  -55  -60  -75]);
+% Sim.Angle = deg2rad([82.1934   75.7876   74.6678  -74.0767  -75.3764  -82.1305]);
+Sim.Angle = deg2rad([76.7735   67.8253   62.0523  -61.3219  -67.3133  -76.6115]);
 
+% Sim.Stiffness = 2.0362e-6;
+% Sim.Stiffness_upper = 1.8320e-6;
+
+% Sim.Plate_MagnetMagnitude = [30973 30962 39510 25856 25211 25256]*Sim.PlateVolume;
 Sim.Plate_MagnetMagnitude = ones(1,6)*120000*Sim.PlateVolume;
-Sim.Stiffness = 2.4e-6;
-Sim.Stiffness_upper = 4e-6;
+Sim.Stiffness = 2.5147e-6;
+Sim.Stiffness_upper = 2.2831e-6;
 
-Sim.BField_Magnitude = 30;
+Sim.BField_Magnitude = 20;      % External B-field with respect to -x axis
+Sim.BField_tilt = 0;            % External B-field with respect to +y axis
+Sim.Transition_upper = 0.1745;
 
 % Sim.Plate_MagnetMagnitude = [13 13 13 13 13 13] * 1e-4;
 % Sim.Stiffness = 6.5131e-6;
@@ -29,6 +42,10 @@ Sim.BField_Magnitude = 30;
 
 [Upper_q, Lower_q] = Sim_Optimization(Sim, "GUI", "on", "DispInfo", "yes");
 
+[Fitness_, v] = optim_bending_and_stability_disp(Sim.Angle, Sim, "GUI", "off", "DispInfo", "no", "InputAngleUnit", "Radian");
+
+disp(v)
+
 
 %% Calibration
 % Calibration은 어떻게 실험할건지 정해서 그에 맞게 모델을 변경해야함
@@ -36,15 +53,31 @@ Sim.BField_Magnitude = 30;
 % 28469]*Sim.PlateVolume; % 1st simulation results Kt_low = 2e-6, Kt_up =
 % 3e-6
 
-% Sim.Plate_MagnetMagnitude = [31105 30247 39991 30001 31387 39941]*Sim.PlateVolume;
-% Sim.Stiffness = 2.4e-6;
-% Sim.Stiffness_upper = 4e-6;
+% Sim.Plate_MagnetMagnitude = [31105 30247 39991 30001 31387 33941]*Sim.PlateVolume;
+% Sim.Plate_MagnetMagnitude = [25031 30227 39991 30075 31391 33911]*Sim.PlateVolume;
+% Sim.Stiffness = 2.0362e-6;
+% Sim.Stiffness_upper = 1.8320e-6;
 
-Sim.Plate_MagnetMagnitude = [7 7 7 7 13 13] * 1e-4;
-Sim.Stiffness = 6.5131e-6;
-Sim.Stiffness_upper = 9.3752e-5;
-Sim.Damping = 1e-7*2; % [Nm/(radian/s)]
-Sim.Damping_upper = 2e-7*2; % [Nm/(radian/s)]
+Sim.Plate_MagnetMagnitude = [30973 30962 39510 25856 25211 25256]*Sim.PlateVolume;
+Sim.Stiffness = 2.5147e-6;
+Sim.Stiffness_upper = 2.2831e-6;
+
+% Sim.Plate_MagnetMagnitude = [34610 33890 39270 28910 39680 31830]*Sim.PlateVolume;
+% Sim.Stiffness = 3.9973e-6;
+% Sim.Stiffness_upper = 5.9993e-6;
+
+Sim.Source_Angle = -90;
+Sim.Source_Distance_x = 50;
+Sim.Source_Distance_z = 15;
+
+Sim.Transition_upper = 0.1745; % 10 degree
+% Sim.Transition_upper = 0.6; % ?? degree
+
+% Sim.Plate_MagnetMagnitude = [7 7 7 7 13 13] * 1e-4;
+% Sim.Stiffness = 6.5131e-6;
+% Sim.Stiffness_upper = 9.3752e-5;
+% Sim.Damping = 1e-7*2; % [Nm/(radian/s)]
+% Sim.Damping_upper = 2e-7*2; % [Nm/(radian/s)]
 
 Sim.Cal_EndTime = 0.5;
 Sim.Angle = deg2rad([25 30 45 -45 -35 -25]);
@@ -54,42 +87,56 @@ q = Sim_Calibration(Sim, "GUI", "on", "DispInfo", "yes");
 clc;
 
 Sim.Angle = deg2rad([25 30 45 -45 -35 -25]);
+% Sim.Transition_upper = 0.1745; % 10 degree
+Sim.Transition_upper = 0.6; %
 
 % data
-measured_data = [815 327; 875 326; 960 330; 1038 319; 1102 262;...
-    1123 194; 1125 119];
+measured_data(:,:,1) = [738 136; 775 130; 811 126; 852 120; 888 107;...
+    923 80; 943 47];
+measured_data(:,:,2) = [734 138; 774 131; 811 127; 852 122; 882 92;...
+    897 53; 901 11];
+measured_data(:,:,3) = [734 138; 771 133; 810 129; 853 123; 879 87;...
+    888 48; 881 8];
+measured_data(:,:,4) = [729 139; 774 137; 813 142; 853 153; 892 159;...
+    932 166; 971 166];
+measured_data(:,:,5) = [730 140; 775 139; 814 148; 849 160; 891 172;...
+    929 185; 967 194];
+measured_data(:,:,6) = [734 139; 777 148; 810 169; 839 202; 862 232;...
+    886 268; 908 301];
 
 measured_angle = zeros(1,7);
-measured_q = zeros(1,6);
+measured_q = zeros(1,6,6);
 
-for i=1:6
+for j=1:6
+    for i=1:6
 
-    x(i) = measured_data(i,1)-measured_data(i+1,1);
-    y(i) = measured_data(i,2)-measured_data(i+1,2);
-    measured_angle(i+1) = rad2deg(atan(abs(y(i)./x(i))));
-    measured_q(i) = measured_angle(i+1) - measured_angle(i);
-
+        x(i) = measured_data(i,1,j)-measured_data(i+1,1,j);
+        y(i) = measured_data(i,2,j)-measured_data(i+1,2,j);
+        measured_angle(i+1) = rad2deg(atan(abs(y(i)./x(i))));
+        measured_q(1,i,j) = measured_angle(i+1) - measured_angle(i);
+    end
 end
 
+measured_q(:,:,4:6) = -measured_q(:,:,4:6);
 measured_q = deg2rad(measured_q);
 
 % disp(measured_q)
 % disp(deg2rad(measured_q))
 
-% x_init = [[31000 31000 32000 31000 32000 35000]*Sim.PlateVolume, [2e-6 3e-6]* 1e3];
-%
-% lb = [ones(1,6)*30000*Sim.PlateVolume, [0.1e-6 0.1e-6]* 1e3];
-% ub = [ones(1,6)*40000*Sim.PlateVolume, [3e-6 4e-6] * 1e3];
+x_init = [[30973 30962 39510 25856 25211 25256]*Sim.PlateVolume, [2.5147e-6 2.2831e-6]* 1e2] * 1e4;
+
+lb = [ones(1,6)*25000*Sim.PlateVolume, [0.1e-6 0.1e-6]* 1e2]*1e4;
+ub = [ones(1,6)*40000*Sim.PlateVolume, [10e-6 10e-6] * 1e2]*1e4;
 
 
-x_init = [[8 8 8 8 8 11]*1e-4, [7e-5 8e-5]];
+% x_init = [[8 8 8 8 8 11]*1e-4, [7e-5 8e-5]];
+% 
+% lb = [[7 7 7 7 7 7]*1e-4, [0.1e-5 0.1e-5]];
+% ub = [[13 13 13 13 13 13]*1e-4, [10e-5 10e-5]];
 
-lb = [[7 7 7 7 7 7]*1e-4, [0.1e-5 0.1e-5]];
-ub = [[13 13 13 13 13 13]*1e-4, [10e-5 10e-5]];
 
-
-options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-10, 'FunctionTolerance', 1e-10, ...
-    'MaxFunctionEvaluations', 1e5, 'OptimalityTolerance', 1e-10, ...
+options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-3, 'FunctionTolerance', 1e-3, ...
+    'MaxFunctionEvaluations', 1e3, 'OptimalityTolerance', 1e-3, ...
     'Algorithm', 'interior-point', "EnableFeasibilityMode", true, ...
     "SubproblemAlgorithm","cg");
 
@@ -108,16 +155,18 @@ toc;
 
 
 %% Optimization for Max. Bending
+clc;
 
 select_stiff_ver = input('remanence or moment?: ', 's');
 
 if strcmpi(select_stiff_ver, 'remanence')
 
-    Sim.Plate_MagnetMagnitdue = ones(1,6) * 80000 * S.PlateVolume;
-    Sim.Stiffness = 2.4e-6;
-    Sim.Stiffness_upper = 4e-6;
-    Sim.Damping = 5e-9*2; % [Nm/(radian/s)]
-    Sim.Damping_upper = 5e-9*2;
+    Sim.Plate_MagnetMagnitude = ones(1,6) * 120000 * Sim.PlateVolume;
+    Sim.Stiffness = 2.5147e-6;
+    Sim.Stiffness_upper = 2.2831e-6;
+    Sim.Damping = 10e-9*2; % [Nm/(radian/s)]
+    Sim.Damping_upper = 10e-9*2;
+    Sim.Transition_upper = 0.1745;
 
 else
 
@@ -129,20 +178,21 @@ else
 
 end
 
-x_init = deg2rad([25 30 45 -45 -35 -25]);
+x_init = deg2rad([82.1934   75.7876   74.6678  -74.0767  -75.3764  -82.1305]);
 
-Sim.Plate_MagnetMagnitude = repmat(80000,1,6) * Sim.PlateVolume;
+Sim.BField_Magnitude = 20;
+Sim.BField_tilt = 0;
 
 lb = repmat(-pi,1,6);
 ub = repmat(pi,1,6);
 
-options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-7, 'FunctionTolerance', 1e-7, ...
-    'MaxFunctionEvaluations', 1e5, 'OptimalityTolerance', 1e-7, ...
+options = optimoptions('fmincon', 'Display', 'iter', 'StepTolerance', 1e-8, 'FunctionTolerance', 1e-8, ...
+    'MaxFunctionEvaluations', 1e5, 'OptimalityTolerance', 1e-8, ...
     'Algorithm', 'interior-point', "EnableFeasibilityMode", true, ...
     "SubproblemAlgorithm","cg");
 
 tic;
-[x_opt, f_val] = fmincon(@(x) optim_bending_and_stability(x, Sim, "GUI", "off", "DispInfo", "no"), ...
+[x_opt, f_val] = fmincon(@(x) optim_bending_and_stability(x, Sim, "GUI", "off", "DispInfo", "no", "InputAngleUnit", "Radian"), ...
     x_init, [], [], [], [], lb, ub, [], options);
 
 
@@ -151,3 +201,29 @@ fprintf('Best Cost (fval_opt): %.4f\n', f_val);
 disp('Optimized x_opt = [theta1, theta2, ...]:');
 disp(rad2deg(x_opt(1:6)));
 toc;
+
+
+%% check for design parameters, and it is regardless of the upper codes
+clc
+
+n = 5;
+w = 3.2e-3;
+l = 2.1e-3;
+t = 0.5e-3;
+
+eps = 0.3e-3;
+a2 = 0.2e-3;
+
+theta = deg2rad([60 65 75]);
+l_ = n*t.*cos(theta)+l.*sin(theta);
+a1 = 0.03*l_;
+h1 = n*t./sin(theta);
+h2 = l_.*cot(theta)+n*t*sin(theta)+eps;
+
+h3 = h2-(a2+n*t)./sin(theta);
+
+for i=1:length(theta)
+
+    fprintf(" l' = %.5f [mm]\t h1 = %.5f [mm]\t h2 = %.5f [mm]\t h3 = %.5f [mm]\n", l_(i)*1e3, h1(i)*1e3, h2(i)*1e3, h3(i)*1e3);
+
+end

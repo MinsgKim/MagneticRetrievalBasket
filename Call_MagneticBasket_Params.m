@@ -17,14 +17,18 @@ function MB = Call_MagneticBasket_Params
 
     % Source Magnet Properties
     MB.BField_Magnitude = 20;
-    MB.Source_MagnetMagnitude = 4.4942; 
+
+    MB.Source_MagnetMagnitude = 4.4942;
+    MB.Source_Angle = 180;
+    MB.Source_Distance_x = 60;
+    MB.Source_Distance_z = 15;
 
     % Mechanical Properties
     MB.Stiffness = 7e-8; % [Nm/(radian)]
-    MB.Damping = 5e-9*2; % [Nm/(radian/s)]
+    MB.Damping = 10e-9*2; % [Nm/(radian/s)]
     MB.Stiffness_upper = 7e-8*2;
-    MB.Damping_upper = 5e-9*2;
-    MB.Transition_upper = 0.01;
+    MB.Damping_upper = 10e-9*2;
+    MB.Transition_upper = 0.1745;
 
     % Simulink Parameters
     MB.Opt_EndTime = 0.15; % [sec]

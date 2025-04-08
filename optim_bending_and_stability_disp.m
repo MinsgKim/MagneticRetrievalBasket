@@ -1,4 +1,7 @@
-function Fitness = optim_bending_and_stability(x, SimParams, Options)
+% this code is same with optim_bending_and_stability.m, it is written to
+% show the y position of each joint
+
+function [Fitness, v] = optim_bending_and_stability_disp(x, SimParams, Options)
 
 arguments
 
@@ -54,6 +57,6 @@ Lower_q = SimOut.Lower_q.Data(end,:);
 
     Fitness = w*F1+(1-w)*F2;
 
-    % v = [LinkPoint_upper(:,2) LinkPoint_lower(:,2)];
+    v = [LinkPoint_upper(:,2) LinkPoint_lower(:,2)];
 
 end
