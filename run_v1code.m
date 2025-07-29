@@ -8,7 +8,7 @@ addpath('magnetic_robot_sim_opt_SP_v1')
 Simscape_Preprocessing;
 
 %% Test_Run_SimOpt_Sejun ver1
-Fitness = Simscape_Fitness(Input.x_init_test, SimParams, Fixed, "DispInfo", "yes", "InputAngleUnit", "Radian", "GUI", "on");
+Fitness = Simscape_Fitness(Input.x_init_test2, SimParams, Fixed, "DispInfo", "yes", "InputAngleUnit", "Radian", "GUI", "on");
 
 
 

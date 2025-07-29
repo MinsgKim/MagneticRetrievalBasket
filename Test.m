@@ -59,6 +59,9 @@ disp(v)
 % Sim.Stiffness_upper = 1.8320e-6;
 
 Sim.Plate_MagnetMagnitude = [30973 30962 39510 25856 25211 25256]*Sim.PlateVolume;
+% Sim.Stiffness = 2.5147e-6;
+% Sim.Stiffness_upper = 2.2831e-6;
+
 Sim.Stiffness = 2.5147e-6;
 Sim.Stiffness_upper = 2.2831e-6;
 
@@ -67,7 +70,7 @@ Sim.Stiffness_upper = 2.2831e-6;
 % Sim.Stiffness_upper = 5.9993e-6;
 
 Sim.Source_Angle = -90;
-Sim.Source_Distance_x = 50;
+Sim.Source_Distance_x = 60;
 Sim.Source_Distance_z = 15;
 
 Sim.Transition_upper = 0.1745; % 10 degree
@@ -226,4 +229,118 @@ for i=1:length(theta)
 
     fprintf(" l' = %.5f [mm]\t h1 = %.5f [mm]\t h2 = %.5f [mm]\t h3 = %.5f [mm]\n", l_(i)*1e3, h1(i)*1e3, h2(i)*1e3, h3(i)*1e3);
 
+end
+
+%% Practice Note
+clear; clc;
+
+% 1) 기본 상수 정의
+Mr   = 40e3;                       % 잔류 자기화 상수 [A/m]
+V1   = 3e-3 * 2e-3 * 0.5e-3;        % 원 링크 부피 [m^3]
+w    = 3e-3;                        % 링크 가로 길이 [m]
+l    = 2e-3;                        % 링크 세로 길이 [m]
+mu0  = 4 * pi * 1e-7;               % 진공 투자율 [H/m]
+m1   = Mr * V1 * [0; 1; 0];         % 단일 링크의 자기 모멘트 벡터
+r1   = ([1+1+0.2; 0; 0] * 1e-3);    % 기준 위치 벡터 [m]
+
+% 2) 계산하고 싶은 그리드 크기 목록
+gridSizes = [1, 2, 3, 4, 16, 25, 100, 200, 500];
+
+% 3) 결과 저장용 배열 초기화
+B_sum = zeros(size(gridSizes));  % 각 그리드에 대한 |B| 합
+
+% 4) 반복문으로 각 그리드에 대한 계산 수행
+for k = 1:numel(gridSizes)
+    N = gridSizes(k);
+    
+    % 링크 하나일 때: 원본 자기 모멘트 사용
+    if N == 1
+        m_vec = m1;
+    else
+        % portion 조정: 링크 부피는 V1/(N^2)
+        Vpor = V1 / (N^2);
+        m_vec = Mr * Vpor * [0; 1; 0];
+    end
+    
+    % 그리드 좌표: 중심을 기준으로 linspace 생성
+    coords_w = linspace(-w/2 + w/(2*N), w/2 - w/(2*N), N);
+    coords_l = linspace(-l/2 + l/(2*N), l/2 - l/(2*N), N);
+    
+    Bn = 0;  % 이 그리드 전체에 대한 |B| 합
+    
+    for i = 1:N
+        for j = 1:N
+            % 각 링크 위치 벡터
+            offset = [ coords_w(j); 0; coords_l(i) ];
+            r_vec  = r1 - offset;
+            r_hat  = r_vec / norm(r_vec);
+            
+            % 쌍극자장 계산 (식: μ0/4π · (3 r̂r̂' – I) · m / |r|^3)
+            B = mu0/(4*pi*norm(r_vec)^3) * (3*(r_hat*r_hat') - eye(3)) * m_vec;
+            
+            Bn = Bn + norm(B);
+        end
+    end
+    
+    B_sum(k) = Bn;
+end
+
+% 5) 결과 출력
+for k = 1:numel(gridSizes)
+    fprintf('Grid %3dx%-3d → |B| 합 = %.4e [T]\n', ...
+            gridSizes(k), gridSizes(k), B_sum(k));
+end
+
+%% 2
+clear; clc;
+
+% 1) 기본 상수 정의
+Mr   = 40e3;                       % 잔류 자기화 상수 [A/m]
+V1   = 3e-3 * 2e-3 * 0.5e-3;        % 원 링크 부피 [m^3]
+w    = 2e-3;                        % 링크 가로 길이 [m]
+mu0  = 4 * pi * 1e-7;               % 진공 투자율 [H/m]
+m1   = Mr * V1 * [0; 1; 0];         % 단일 링크의 자기 모멘트 벡터
+r1   = ([1+1+0.2; 0; 0] * 1e-3);    % 기준 위치 벡터 [m]
+
+% 2) 한 방향 분할 목록 (N×1)
+gridSizes = [1, 2, 3, 4, 16, 25, 100, 200, 500, 2500];
+
+% 3) 결과 저장용 배열 초기화
+B_sum = zeros(size(gridSizes));
+
+% 4) x축 방향만 N등분 후 |B| 합 계산
+for k = 1:numel(gridSizes)
+    N = gridSizes(k);
+    
+    % 단일 링크일 때 원본 m1, 아닐 땐 부피 비례 재계산
+    if N == 1
+        m_vec = m1;
+    else
+        Vpor = V1 / (N);
+        m_vec = Mr * Vpor * [0; 1; 0];
+    end
+    
+    % x축 좌표만 N분할, y,z는 0 고정
+    x_coords = linspace(-w/2 + w/(2*N), w/2 - w/(2*N), N);
+    
+    Bn = 0;  % 이 N×1 분할에 대한 |B| 합
+    
+    for j = 1:N
+        offset = [x_coords(j); 0; 0 ];  % x축만 이동
+        r_vec  = r1 - offset;
+        r_hat  = r_vec / norm(r_vec);
+        
+        % 쌍극자장 계산
+        B = mu0/(4*pi*norm(r_vec)^3) * (3*(r_hat*r_hat') - eye(3)) * m_vec;
+        
+        Bn = Bn + norm(B);
+    end
+    
+    B_sum(k) = Bn;
+end
+
+% 5) 결과 출력
+for k = 1:numel(gridSizes)
+    fprintf('Grid %3dx1 → |B| 합 = %.4e [T]\n', ...
+            gridSizes(k), B_sum(k));
 end
