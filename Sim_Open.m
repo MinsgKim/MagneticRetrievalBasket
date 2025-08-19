@@ -4,7 +4,7 @@ Params = Sim_Param_Setup;
 
 ParamsBus = Simulink.Bus.createObject(Params);
 
-open('tests.slx')
+open('Copy_of_tests.slx')
 
 
 %%

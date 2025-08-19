@@ -1,7 +1,7 @@
 function Params = Sim_Param_Setup
 
     % Link Geometry
-    Params.LinkLength = 3 * 1e-3;
+    Params.LinkLength = 1 * 1e-3;
     Params.LinkWidth = 2 * 1e-3;
     Params.LinkThickness = 0.5 * 1e-3;
     Params.LinkVolume = Params.LinkLength * Params.LinkWidth * Params.LinkThickness;
